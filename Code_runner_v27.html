@@ -199,7 +199,7 @@
   const H_STAND=140, H_DUCK=59, P_W=70;            // real sprite (aspect 0.5)
   const SPD_START=189, SPD_RAMP=2.8, SPD_MAX=610;
   const DRONE_ENABLED=false;                       // sla pa dronaren igen genom att satta true
-  const LVL_LEN=[0,9000,15000,15000,18000,16000,20000,16000,18000,999999,23000,999999];
+  const LVL_LEN=[0,4500,15000,15000,18000,16000,20000,16000,18000,999999,23000,999999];
   const LVL_SPD=[0,205,221,232,248,243,265,254,275,281,297,313];
   const LVL_HINT=['','JUMP \u25b2 HOLD=HIGHER  DUCK \u25bc  SHOOT \u2726=ROPES','NEW: DRONE \u2014 duck the beam \u00b7 find the \u2665','NEW: FALLING BLOCKS \u2014 watch the mark','COMBINE.','NEW: SHOOT \u2726 \u2014 cut the ropes','EVERYTHING. FASTER.','DISTRICT: ROOFTOPS','ROOFTOPS + FALLING SKY','BIP 110 AWAITS','ALL OF IT.','THE CITY IS YOURS'];
   const BAR_BOTTOM_OFF=108;
@@ -231,7 +231,7 @@
   const COIN_W=56, BTC_AR=2.0, BTCG_AR=1.182;
   const RUNE_AR=0.8125, RUNE_W=29, RUNE_OFF=16, RUNE_BTC=5, RUNE_LIFE=3.4;  // guld-runa pa bergstoppen
   // bana 1: fem beloningsmoment, utspridda over banan (langd 9000), forst efter intromonstret
-  const L1REWARDS=[ {at:3000,k:'coins'}, {at:4200,k:'heart'}, {at:5600,k:'rune'}, {at:7000,k:'heart'}, {at:8200,k:'rune'} ];
+  const L1REWARDS=[ {at:1500,k:'coins'}, {at:2100,k:'heart'}, {at:2800,k:'rune'}, {at:3500,k:'heart'}, {at:4100,k:'rune'} ];
   const L9_HEARTS=8, L9_NEED=Math.ceil(L9_HEARTS*0.75);   // bana 9: 8 hjartan totalt, kravs 75% (=6) for BIP 110-fighten
   // ----- mempool tuning -----
   const TX_W=22, FILL_DIST=1900, TX_FILL=0.07, SURGE_AT=0.80;
@@ -540,10 +540,8 @@
     const g1={k:'g1'}, g2={k:'g2'}, ah={k:'air'}, rp={k:'rope'};
     const seq=[ [g1,420],[g1,450],                     // S1: tva laga, jamnt
       [g1,430],[g2,480],                               // S2: forsta dubbeln
-      [g1,420],[g2,310],[g2,480],                      // S3: tva dubblar
       [g1,390],[ah,430],[g1,440],                      // S4: hogt block + duck
-      [g2,350],[g1,310],[g2,500],                      // S5: rytmkombo
-      [g1,430],[rp,520],[g1,430],[rp,520] ];           // S6: introducera repet - skjut igenom
+      [g1,430],[rp,520] ];                             // S6: introducera repet - skjut igenom
     return seq;
   })();
   function spawnGround(){
