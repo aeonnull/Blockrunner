@@ -235,7 +235,7 @@
   const SAT_GUARANTEED_LEVELS=[2];   // 100% chans pa dessa nivaer istallet for SAT_CHANCE
   const SAT_BLOCK_H=120, SAT_BLOCK_W=110;
   // sat-hojd: maxRise (fullt hopp) + spelarhojd (H_STAND) + plockradie (gy=26, icke-rune-gren) - 16px marginal (se rapport for hojdrakning)
-  const SAT_ABOVE_BLOCK = Math.pow(JUMP_V,2)/(2*GRAV) + H_STAND + 26 - 16;
+  const SAT_ABOVE_BLOCK = 320;
   // bana 1: fem beloningsmoment, utspridda over banan (langd 9000), forst efter intromonstret
   const L1REWARDS=[ {at:1500,k:'coins'}, {at:2100,k:'heart'}, {at:2800,k:'rune'}, {at:3500,k:'heart'}, {at:4100,k:'rune'} ];
   const L9_HEARTS=8, L9_NEED=Math.ceil(L9_HEARTS*0.75);   // bana 9: 8 hjartan totalt, kravs 75% (=6) for BIP 110-fighten
