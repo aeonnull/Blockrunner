@@ -24,8 +24,8 @@ DRONE_ENABLED=false ligger kvar orörd. Bygg ingenting drönarrelaterat förrän
 
 ---
 
-### ETAPP 2b: Nivå 2, hopp-block-serie + nivåsammanfattning
-Separat instruktion kommer. Väntar.
+### ETAPP 2b: Nivå 2, rare sat + hopp-block + nivåsammanfattning
+Rare sat (max 1 per nivå, 60% chans) plus ETT plattformsblock att hoppa upp på för att nå saten, samt nivåsammanfattning. INTE en serie block. Separat instruktion kommer/har kommit.
 
 ---
 

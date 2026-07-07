@@ -230,6 +230,9 @@
   const runeImg=new Image();  runeImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANAAAAEACAYAAADC7fjvAAAC1klEQVR42u3dsWnDUBSGUSmoducFsoEgWwiv4BEyS/AALrRC0BYGbeA2hTrVAWeHXHjics/pZUeyP56bn/QdIT9f3evI9388j73/y63rK3/+bxIAAYGAQEAgIEBAICAQEAgIEBAICAQEAgIBAQKCttJvOY7e41QX3SNl3xM5gUBAICAQEAgIEBAICAQEAgIEBAICAYGAQECAgKCxw7cY9jy1Zd8TOYFAQCAgEBAICBAQCAgEBAICBAQCAgGBgEBAgICgsSH6Atn3PNM8hq5frmvqL8D5FLt+251AgIBAQCAgEBAgIBAQCAgEBAgIBAQCAgGBgAABQUND9T1P9vePyr5ncgKBgEBAgIBAQCAgEBAgIBAQCAgEBAgIBAQCAgFBMUP1B1B9D3P0/0f6eI/9/d+fsT3b5db1TiDwEw4EBAICBAQCAgGBgAABgYBAQCAgEBAgIBAQJBLeA51Pseu33YfA/x29J3ICgYBAQCAgEBAgIBAQCAgEBAgIBAQCAgGBgAABQWPhPZA9D04gQEAgIBAQCAgQEAgIBAQCAgQEAgIBgYBAQICAoJmh+gOY5tG3ACcQCAgEBAICBAQCAgGBgAABgYBAQCAgEBAgIBAQZFF+D7Rc19L3bw/lBAIBgYBAQICAQEAgIBAQICAQEAgIBAQCAgQEAgIBgYAAAYGAQEAgIEBAICAQEAgIBAQICAQEAgIBAQICAYGAQECAgEBAICAQEAgIEBAICAQEAgIEBAICAYGAQECAgEBAICAQECAgEBAICAQECAgEBAICAYGAAAGBgCCJofoDmOax9P0v11UFTiAQEAgIBAQICAQEAgIBAQICAYGAQEAgIEBAICDII/0eKLpnie6B7GmcQICAQEAgIBAQICAQEAgIBAQICAQEAgIBgYAAAUFD/e+9e0VeYNs9RPJ6PJ1A4CccCAgEBAgIBAQCAgEBAgIBgYBAQCAgQEAgIEjlD915P8Sd1K7gAAAAAElFTkSuQmCC';
   const COIN_W=56, BTC_AR=2.0, BTCG_AR=1.182;
   const RUNE_AR=0.8125, RUNE_W=29, RUNE_OFF=16, RUNE_BTC=5, RUNE_LIFE=3.4;  // guld-runa pa bergstoppen
+  // rare sat (niva 2): silverfargad myntvariant pa ett plattformsblock
+  const SAT_BTC=21, SAT_CHANCE=0.60, SAT_WIN_FROM=3750, SAT_WIN_TO=6500;
+  const SAT_BLOCK_H=120, SAT_BLOCK_W=110, SAT_ABOVE_BLOCK=232;   // block 120px over marken; sat 232px over blocket (se rapport for hojdrakning)
   // bana 1: fem beloningsmoment, utspridda over banan (langd 9000), forst efter intromonstret
   const L1REWARDS=[ {at:1500,k:'coins'}, {at:2100,k:'heart'}, {at:2800,k:'rune'}, {at:3500,k:'heart'}, {at:4100,k:'rune'} ];
   const L9_HEARTS=8, L9_NEED=Math.ceil(L9_HEARTS*0.75);   // bana 9: 8 hjartan totalt, kravs 75% (=6) for BIP 110-fighten
@@ -243,27 +246,28 @@
   const BLOCK_START=873421;
 
   let state='start',speed,dist,score,best=0;
-  let playerName='ANON', coins=0, runesGot=0; const COIN_VAL=25;
+  let playerName='ANON', coins=0, runesGot=0, satsGot=0; const COIN_VAL=25;
   let lbFallback=[{n:'MIO',s:1450},{n:'SATOSHI',s:1120},{n:'ORDINAL',s:880},{n:'BLOCK',s:610},{n:'DEGEN',s:420}];
   function esc(t){return String(t).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
   let player,obstacles,particles,spawnX,bgScroll,shakeT,flashT,coinsArr,coinTimer,lastAction,lastWasRope;
-  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0;
+  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0,rareSatRolled=false,rareSatWillSpawn=false,rareSatSpawned=false,rareSatCollectedThisLevel=false;
   let igrace=0,exhaustedT=0;
   let bonus=0,blockHeight,blockFill,chain,surge,txArr,txTimer,confirmMsgT,txPops;
 
   function reset(){
     speed=SPD_START; dist=0; score=0;
     player={x:Math.min(150,W*0.30),y:GROUND_Y,vy:0,onGround:true,sq:0,step:0};
-    obstacles=[]; particles=[]; spawnX=W+340; bgScroll=0; lastAction='jump';
+    obstacles=[]; particles=[]; spawnX=W+340; bgScroll=0; lastAction='jump'; lastWasRope=false;
     shakeT=0; flashT=0; coyote=0; buffer=0; jumpHeld=false; ducking=false;
     drone=null; droneTimer=DRONE_ENABLED?9:1e9; boss=null; bossTimer=24; shieldPick=null; shieldTimer=16; hasShield=false; shieldFlashT=0; gaps=[]; zone='street'; zoneT=2200; zoneBannerT=0; stars=[]; ropeBalls=[]; lanterns=[]; lanternTimer=2; roofBoss=null; pendingRoofBoss=false; roofVisits=0; landT=0;
     level=startLevel; maxLevel=Math.max(maxLevel,level); lvlDist=0; bossDone=false; lvlBannerT=2.6; starsThrown=0; heartsGot=0;
     zone=(level>=7&&level<=9)?'roof':'street'; zoneBlend=(zone==='roof')?1:0; gapX=W+340;
     if(level===7||level===8||level===9)pendingRoofBoss=true;
     speed=LVL_SPD[Math.min(level,11)]; heartLvlDone=false; waterDone=false;
+    rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400;
     if(zone==='roof')roofRuns++; fireT=0; fireCd=0; hammer=null; hammerTimer=14; zapT=0; charges=0; swingT=0; swingTarget=null; swingHit=false;
-    coinsArr=[]; coinTimer=2.0; coins=0; runesGot=0;
+    coinsArr=[]; coinTimer=2.0; coins=0; runesGot=0; satsGot=0;
     bonus=0; blockHeight=BLOCK_START; blockFill=0.40; chain=[]; surge=null; txArr=[]; txTimer=2.2; confirmMsgT=0; txPops=[];
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL starts every level shielded
@@ -495,6 +499,7 @@
     if(level===7||level===8||level===9){ pendingRoofBoss=true; bossDone=false; }
     if(level===11){ zoneT=2000; }
     heartLvlDone=false; waterDone=false;
+    rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL is re-shielded on each new level
     if(typeof refreshLvlSel==='function') refreshLvlSel();
@@ -720,6 +725,24 @@
     // ---------- STREET HEART ----------
     if(level>=2 && zone==='street' && !heartLvlDone && lvlDist>LVL_LEN[Math.min(level,10)]*0.55){
       heartLvlDone=true; hearts.push({x:W+80,y:GROUND_Y-232,bob:0,got:false}); }
+    // ---------- RARE SAT (endast niva 2): max 1/niva, 60% chans, hoppblock + sat utom rackhall fran marken ----------
+    if(level===2 && zone==='street' && !rareSatSpawned){
+      if(!rareSatRolled && lvlDist>SAT_WIN_FROM){ rareSatRolled=true; rareSatWillSpawn=Math.random()<SAT_CHANCE; }
+      if(rareSatRolled){
+        if(!rareSatWillSpawn || lvlDist>=SAT_WIN_TO){ rareSatSpawned=true; }
+        else {
+          const satBx=W+260, satSafeGap=Math.max(180,speed*0.85);   // samma spawn-skydd som fallande block (fallers) anvander
+          const satClear = !obstacles.some(o=>Math.abs(o.x-satBx)<satSafeGap)
+            && !gaps.some(g=>satBx>g.x-60 && satBx<g.x+g.w+60)
+            && !plats.some(p=>satBx>p.x-70 && satBx<p.x+p.w+70);
+          if(satClear){
+            plats.push({x:satBx,top:GROUND_Y-SAT_BLOCK_H,w:SAT_BLOCK_W});
+            coinsArr.push({x:satBx+SAT_BLOCK_W/2,y:GROUND_Y-(SAT_BLOCK_H+SAT_ABOVE_BLOCK),bob:0,got:false,sat:true});
+            rareSatSpawned=true;
+          }
+        }
+      }
+    }
     // ---------- BIP 110 (takduellen: ducka - hoppa - kasta) ----------
     if(zone==='roof' && pendingRoofBoss && !roofBoss && (level===7 ? (starsThrown>=5 && lvlDist>1500) : level===9 ? (heartsGot>=L9_NEED && lvlDist>1500) : lvlDist>1500) && !gaps.some(g=>g.x>player.x&&g.x<W+320) && !plats.some(p=>p.roof)){
       roofBoss={x:W+180,phase:'in',t:0,bob:0,cycle:0,cycleTarget:(level===7?1:level===8?2:3),ball:(level===8)}; pendingRoofBoss=false; }
@@ -768,7 +791,7 @@
     if(player.y>H+60){die('pit');return;}
     updateMempool(dt);
     document.getElementById('scoreVal').textContent=score;
-    document.getElementById('coinVal').textContent='\u20BF '+coins+'  R'+runesGot;
+    document.getElementById('coinVal').textContent='\u20BF '+coins+'  R'+runesGot+'  S'+satsGot;
 
     if(buffer>0)buffer-=dt;
     if(player.onGround)coyote=COYOTE; else if(coyote>0)coyote-=dt;
@@ -910,6 +933,9 @@
           if(cn.rune){ coins+=RUNE_BTC; runesGot++; coinSfx(); flashT=Math.max(flashT,0.10); shakeT=Math.max(shakeT,0.16);
             popText(cn.x,cy-30,'+'+RUNE_BTC+' \u20BF','#ffd24a');
             for(let i=0;i<30;i++)particles.push({x:cn.x,y:cy,vx:(Math.random()-0.5)*440,vy:-Math.random()*400,life:0.45+Math.random()*0.45,c:Math.random()<0.6?'#f7a000':'#ffe08a',s:4+Math.random()*5}); }
+          else if(cn.sat){ coins+=SAT_BTC; satsGot++; rareSatCollectedThisLevel=true; coinSfx(); flashT=Math.max(flashT,0.10); shakeT=Math.max(shakeT,0.16);
+            popText(cn.x,cy-30,'+'+SAT_BTC+' \u20BF','#e8ecf0');
+            for(let i=0;i<30;i++)particles.push({x:cn.x,y:cy,vx:(Math.random()-0.5)*440,vy:-Math.random()*400,life:0.45+Math.random()*0.45,c:Math.random()<0.6?'#e8ecf0':'#ffffff',s:4+Math.random()*5}); }
           else { coins++; coinSfx();
             for(let i=0;i<14;i++)particles.push({x:cn.x,y:cy,vx:(Math.random()-0.5)*240,vy:-Math.random()*230,life:0.3+Math.random()*0.25,c:Math.random()<0.6?'#f7a000':'#ffe08a',s:3+Math.random()*4}); }
         } } }
@@ -1394,6 +1420,12 @@
         if(runeImg.complete && runeImg.naturalWidth>0) ctx.drawImage(runeImg, cn.x-rw/2, cy-rh/2, rw, rh);
         else { ctx.fillStyle='#e69000'; ctx.fillRect(cn.x-rw/2,cy-rh/2,rw,rh); }
         continue; }
+      if(cn.sat){ ctx.save(); ctx.globalAlpha=0.22+0.18*Math.abs(Math.sin(cn.bob*7)); ctx.fillStyle='#e8ecf0';
+        ctx.beginPath(); ctx.arc(cn.x,cy,cw*0.62,0,Math.PI*2); ctx.fill(); ctx.restore();
+        ctx.fillStyle='#c7cdd3'; ctx.fillRect(cn.x-cw/2,cy-ch/2,cw,ch);
+        ctx.fillStyle='#ffffff'; ctx.globalAlpha=0.55+0.45*Math.abs(Math.sin(cn.bob*9));
+        ctx.fillRect(cn.x-cw*0.20,cy-ch*0.28,3,3); ctx.globalAlpha=1;
+        continue; }
       const twk=(cn.bob%0.62)<0.18;
       if(twk && btcgImg.complete && btcgImg.naturalWidth>0){
         const gw=cw*1.45, gh=gw/BTCG_AR; ctx.drawImage(btcgImg, cn.x-gw/2, cy-gh/2, gw, gh);
@@ -1591,6 +1623,8 @@
     ctx.fillText('LEVEL '+Math.min(level,10)+' CLEAR', W/2, H*0.42);
     ctx.fillStyle=ORANGE; ctx.font='700 13px monospace';
     ctx.fillText('NEXT: '+LVL_HINT[Math.min(level+1,11)], W/2, H*0.50);
+    ctx.fillStyle='#8f93b8'; ctx.font='700 11px monospace';
+    ctx.fillText('₿ '+coins+'   R '+runesGot+'   RARE SAT: '+(rareSatCollectedThisLevel?'FOUND':'MISSED'), W/2, H*0.555);
     if(clearedT>0.6&&(Math.floor(clearedT*2)%2===0)){ ctx.fillStyle='#8f93b8'; ctx.font='700 12px monospace';
       ctx.fillText('TAP FOR NEXT BLOCK', W/2, H*0.58); }
   }
