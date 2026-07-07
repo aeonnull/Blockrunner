@@ -232,6 +232,7 @@
   const RUNE_AR=0.8125, RUNE_W=29, RUNE_OFF=16, RUNE_BTC=5, RUNE_LIFE=3.4;  // guld-runa pa bergstoppen
   // rare sat (niva 2): silverfargad myntvariant pa ett plattformsblock
   const SAT_BTC=21, SAT_CHANCE=0.60, SAT_WIN_FROM=3750, SAT_WIN_TO=6500;
+  const SAT_GUARANTEED_LEVELS=[2];   // 100% chans pa dessa nivaer istallet for SAT_CHANCE
   const SAT_BLOCK_H=120, SAT_BLOCK_W=110, SAT_ABOVE_BLOCK=232;   // block 120px over marken; sat 232px over blocket (se rapport for hojdrakning)
   // bana 1: fem beloningsmoment, utspridda over banan (langd 9000), forst efter intromonstret
   const L1REWARDS=[ {at:1500,k:'coins'}, {at:2100,k:'heart'}, {at:2800,k:'rune'}, {at:3500,k:'heart'}, {at:4100,k:'rune'} ];
@@ -559,13 +560,43 @@
       else { obstacles.push({type:'air',x:spawnX,bottom:GROUND_Y-170,w:52,h:240}); }
       spawnX+=30+gap; l1Idx++; lastAction='jump'; return;
     }
+    // ---------- KOMBOBIBLIOTEK (endast niva 2): tre handdesignade monster, ~var tredje spawn ----------
+    if(level===2 && Math.random()<0.33){
+      const comboClear = !plats.some(p=>Math.abs(p.x-spawnX)<400) && !gaps.some(g=>Math.abs(g.x-spawnX)<300)
+        && !fallers.some(fb=>fb.state!=='landed' && Math.abs((fb.landX!=null?fb.landX:fb.x)-spawnX)<300);
+      if(comboClear){
+        const ct=Math.min(1,(speed-SPD_START)/300);
+        const tMinGap=Math.max(380-ct*40, speed*0.82+80), tMaxGap=tMinGap+150+ct*60;
+        const tailGap=tMinGap+Math.random()*(tMaxGap-tMinGap);
+        const FULL_AIRTIME=2*Math.abs(JUMP_V)/GRAV, SHORT_AIRTIME=2*(JUMP_CUT*Math.abs(JUMP_V))/GRAV;   // last, aldrar ej fysiken
+        const k=Math.floor(Math.random()*3);
+        if(k===0){                                          // K1: dubbelhopp - tva laga block, landa och hoppa igen
+          const kgap=speed*FULL_AIRTIME+30;                  // > max sammanhangande hoppstracka -> tvingar landning mellan blocken
+          obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:30,h:30});
+          obstacles.push({type:'ground',x:spawnX+30+kgap,y:GROUND_Y,w:30,h:30});
+          spawnX+=30+kgap+30+tailGap; lastAction='jump';
+        } else if(k===1){                                   // K2: hopp till duck - lagt block + bom tatt efter
+          const kgap=speed*FULL_AIRTIME+40;                  // rymmer aven ett fullt hall-in-hopp innan bommen kommer
+          obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:30,h:30});
+          obstacles.push({type:'air',x:spawnX+30+kgap,bottom:GROUND_Y-BAR_BOTTOM_OFF,w:50,h:240});
+          spawnX+=30+kgap+50+tailGap; lastAction='duck';
+        } else {                                             // K3: rep + block - skjut och hoppa i sekvens
+          const kgap=speed*SHORT_AIRTIME+40;                 // kort hopp racker for ett lagt block
+          obstacles.push({type:'rope',x:spawnX,w:ROPE_W,cut:false,fallY:0,fallV:0,cutY:0});
+          obstacles.push({type:'ground',x:spawnX+ROPE_W+kgap,y:GROUND_Y,w:30,h:30});
+          spawnX+=ROPE_W+kgap+30+tailGap; lastAction='jump';
+        }
+        lastWasRope=false; return;
+      }
+    }
+    const preSpawnX=spawnX;
     const t=Math.min(1,(speed-SPD_START)/300);
     const barsOn=true;                 // hoppa & ducka fran forsta nivan
     const r=Math.random();
     // valj typ + vilken handling den kraver (jump/duck)
     let type, action='jump';
     if((level===5?lvlDist>1500:(level===6||level>=10)) && charges>0 && r<0.15){ type='mtn'; }
-    else if((level===2 || (level===5?lvlDist>1500:(level===6||level>=10))) && r<0.30 && !lastWasRope){ type='rope'; }
+    else if(!lastWasRope && ((level===2 && r<0.40) || ((level===5?lvlDist>1500:(level===6||level>=10)) && r<0.30))){ type='rope'; }
     else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):0.38);
       if(r<1-airP){ type='ground'; } else { type='air'; action='duck'; } }
     // luckor: mer luft tidigt, extra nar man maste byta stallning (ducka<->hoppa)
@@ -592,6 +623,19 @@
       const bw=44+t*30+Math.random()*(10+t*18);
       obstacles.push({type:'air',x:spawnX,bottom:GROUND_Y-BAR_BOTTOM_OFF,w:bw,h:240});
       spawnX+=bw+gap;
+    }
+    // ---------- MYNTBAGAR (endast niva 2): ~var tredje hinder, bage av 3-5 mynt, alltid inom hopphojd ----------
+    if(level===2 && Math.random()<0.33){
+      const arcFrom=preSpawnX+70, arcTo=spawnX-60;
+      if(arcTo>arcFrom+80){
+        const n=3+Math.floor(Math.random()*3);
+        const step=(arcTo-arcFrom)/Math.max(1,n-1);
+        for(let i=0;i<n;i++){
+          const tt=n>1?i/(n-1):0.5;
+          const ay=GROUND_Y-(70+130*Math.sin(Math.PI*tt));   // topp 200px over marken, klart under 248px maxhopp
+          coinsArr.push({x:arcFrom+step*i,y:ay,bob:i*0.4,got:false});
+        }
+      }
     }
     lastAction=action; lastWasRope=(type==='rope');
   }
@@ -727,7 +771,7 @@
       heartLvlDone=true; hearts.push({x:W+80,y:GROUND_Y-232,bob:0,got:false}); }
     // ---------- RARE SAT (endast niva 2): max 1/niva, 60% chans, hoppblock + sat utom rackhall fran marken ----------
     if(level===2 && zone==='street' && !rareSatSpawned){
-      if(!rareSatRolled && lvlDist>SAT_WIN_FROM){ rareSatRolled=true; rareSatWillSpawn=Math.random()<SAT_CHANCE; }
+      if(!rareSatRolled && lvlDist>SAT_WIN_FROM){ rareSatRolled=true; rareSatWillSpawn=SAT_GUARANTEED_LEVELS.includes(level)?true:Math.random()<SAT_CHANCE; }
       if(rareSatRolled){
         if(!rareSatWillSpawn || lvlDist>=SAT_WIN_TO){ rareSatSpawned=true; }
         else {
@@ -1623,8 +1667,8 @@
     ctx.fillText('LEVEL '+Math.min(level,10)+' CLEAR', W/2, H*0.42);
     ctx.fillStyle=ORANGE; ctx.font='700 13px monospace';
     ctx.fillText('NEXT: '+LVL_HINT[Math.min(level+1,11)], W/2, H*0.50);
-    ctx.fillStyle='#8f93b8'; ctx.font='700 11px monospace';
-    ctx.fillText('₿ '+coins+'   R '+runesGot+'   RARE SAT: '+(rareSatCollectedThisLevel?'FOUND':'MISSED'), W/2, H*0.555);
+    if(level===2){ ctx.fillStyle='#8f93b8'; ctx.font='700 11px monospace';
+      ctx.fillText('₿ '+coins+'   R '+runesGot+'   RARE SAT: '+(rareSatCollectedThisLevel?'FOUND':'MISSED'), W/2, H*0.555); }
     if(clearedT>0.6&&(Math.floor(clearedT*2)%2===0)){ ctx.fillStyle='#8f93b8'; ctx.font='700 12px monospace';
       ctx.fillText('TAP FOR NEXT BLOCK', W/2, H*0.58); }
   }
