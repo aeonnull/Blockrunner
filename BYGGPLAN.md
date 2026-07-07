@@ -13,12 +13,28 @@ Basfil: Code_runner_v27.html. Detta dokument är den enda sanningen. Du (byggmod
 - ETAPP 0 (drönare av + testläge nivåval): klar i v26.
 - Tempohöjning nivå 1 (LVL_SPD 189 till 205): klar i v27.
 - Basfilen v27 innehåller: DRONE_ENABLED=false som spärrar drönarens tre spawnvägar, testknapprad 1-11 på startskärmen, nivå 1-fart 205.
+- ETAPP 1 (Nivå 1 kortas till 4500): klar, godkänd.
+- ETAPP 2a (Nivå 2 spelmekanik: bana till 7500, rep från nivå 2, hint utan drönare, runräknare i HUD): klar, godkänd.
+- RÄTTNING 2a-fix (aldrig två rep i rad, extra avstånd efter rep): klar, godkänd.
+
+## DRÖNAREN: PARKERAD TILLS VIDARE
+DRONE_ENABLED=false ligger kvar orörd. Bygg ingenting drönarrelaterat förrän uttrycklig instruktion kommer.
 
 ## ÅTERSTÅENDE ETAPPER
 
 ---
 
-### ETAPP 1: Nivå 1 kortas till 4500
+### ETAPP 2b: Nivå 2, hopp-block-serie + nivåsammanfattning
+Separat instruktion kommer. Väntar.
+
+---
+
+### ETAPP 2c: Nivå 2, rosa skymningshimmel + Gamla Stockholm-siluett
+Separat instruktion kommer. Endast nivå 2. Väntar.
+
+---
+
+### ETAPP 1 (KLAR, godkänd): Nivå 1 kortas till 4500
 Exakt tre byten, inget annat.
 
 Byte 1:
@@ -51,8 +67,15 @@ Testkrav (användaren testar): nivå 1 klarbar, alla fem belöningsmoment nås (
 
 ---
 
-### ETAPP 2: Nivå 2 kortas till 7500, rep från nivå 2, hint utan drönare
+### ETAPP 2 / 2a (KLAR, godkänd, se RÄTTNING 2a-fix nedan): Nivå 2 kortas till 7500, rep från nivå 2, hint utan drönare
 Exakt tre byten, inget annat. Kräver att ETAPP 1 är godkänd.
+OBS: den faktiskt byggda versionen (ETAPP 2a) avvek från byte 2 och 3 nedan efter arkitektens instruktion i chatten — se RÄTTNING-noten direkt under denna sektion. Byte 1 (LVL_LEN) stämmer med det som byggdes.
+
+RÄTTNING (byggd i chatten, ej i denna ursprungliga spec):
+- Byte 2 byggdes som: rep tillåts från och med nivå 2 (`level===2 || ...`), berget (mtn) förblir opåverkat på nivå 2, samma 30%-chans.
+- Byte 3 byggdes som: hint-text `'SHOOT ✦=ROPES · GOLD RUNE = 5 ₿, GRAB FAST'` istället för `'NEW: ROPES...'` nedan.
+- Extra (ej i ursprunglig spec): runräknare (runesGot) i HUD bredvid ₿-räknaren.
+- RÄTTNING 2a-fix (efter godkännande): aldrig två rep i rad (lastWasRope), +120 extra gap efter ett rep.
 
 Byte 1:
 ```
