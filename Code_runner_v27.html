@@ -560,34 +560,38 @@
       else { obstacles.push({type:'air',x:spawnX,bottom:GROUND_Y-170,w:52,h:240}); }
       spawnX+=30+gap; l1Idx++; lastAction='jump'; return;
     }
+    // ---------- SPAWN-SKYDD MOT PLATTFORMAR (t.ex. sat-blocket): galler ALLA hindertyper ----------
+    for(const p of plats){ if(spawnX>p.x-400 && spawnX<p.x+p.w+400){ spawnX=p.x+p.w+400; } }
     // ---------- KOMBOBIBLIOTEK (endast niva 2): tre handdesignade monster, ~var tredje spawn ----------
     if(level===2 && Math.random()<0.33){
-      const comboClear = !plats.some(p=>Math.abs(p.x-spawnX)<400) && !gaps.some(g=>Math.abs(g.x-spawnX)<300)
-        && !fallers.some(fb=>fb.state!=='landed' && Math.abs((fb.landX!=null?fb.landX:fb.x)-spawnX)<300);
+      const ct=Math.min(1,(speed-SPD_START)/300);
+      const tMinGap=Math.max(380-ct*40, speed*0.82+80), tMaxGap=tMinGap+150+ct*60;
+      const tailGap=tMinGap+Math.random()*(tMaxGap-tMinGap);
+      const FULL_AIRTIME=2*Math.abs(JUMP_V)/GRAV, SHORT_AIRTIME=2*(JUMP_CUT*Math.abs(JUMP_V))/GRAV;   // last, aldrar ej fysiken
+      const k=Math.floor(Math.random()*3);
+      const firstW=(k===2)?ROPE_W:30;
+      const kgap=(k===0)?speed*FULL_AIRTIME+30:(k===1)?speed*FULL_AIRTIME+40:speed*SHORT_AIRTIME+40;
+      const secondX=spawnX+firstW+kgap;
+      // kontrollera bade forsta OCH andra hindret i monstret mot plattforms-zonen (monstret far inte stracka sig in i den)
+      const comboClear = !plats.some(p=>(spawnX>p.x-400&&spawnX<p.x+p.w+400)||(secondX>p.x-400&&secondX<p.x+p.w+400))
+        && !gaps.some(g=>Math.abs(g.x-spawnX)<300) && !fallers.some(fb=>fb.state!=='landed' && Math.abs((fb.landX!=null?fb.landX:fb.x)-spawnX)<300);
       if(comboClear){
-        const ct=Math.min(1,(speed-SPD_START)/300);
-        const tMinGap=Math.max(380-ct*40, speed*0.82+80), tMaxGap=tMinGap+150+ct*60;
-        const tailGap=tMinGap+Math.random()*(tMaxGap-tMinGap);
-        const FULL_AIRTIME=2*Math.abs(JUMP_V)/GRAV, SHORT_AIRTIME=2*(JUMP_CUT*Math.abs(JUMP_V))/GRAV;   // last, aldrar ej fysiken
-        const k=Math.floor(Math.random()*3);
         if(k===0){                                          // K1: dubbelhopp - tva laga block, landa och hoppa igen
-          const kgap=speed*FULL_AIRTIME+30;                  // > max sammanhangande hoppstracka -> tvingar landning mellan blocken
           obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:30,h:30});
-          obstacles.push({type:'ground',x:spawnX+30+kgap,y:GROUND_Y,w:30,h:30});
-          spawnX+=30+kgap+30+tailGap; lastAction='jump';
+          obstacles.push({type:'ground',x:secondX,y:GROUND_Y,w:30,h:30});
+          spawnX=secondX+30+tailGap; lastAction='jump';
         } else if(k===1){                                   // K2: hopp till duck - lagt block + bom tatt efter
-          const kgap=speed*FULL_AIRTIME+40;                  // rymmer aven ett fullt hall-in-hopp innan bommen kommer
           obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:30,h:30});
-          obstacles.push({type:'air',x:spawnX+30+kgap,bottom:GROUND_Y-BAR_BOTTOM_OFF,w:50,h:240});
-          spawnX+=30+kgap+50+tailGap; lastAction='duck';
+          obstacles.push({type:'air',x:secondX,bottom:GROUND_Y-BAR_BOTTOM_OFF,w:50,h:240});
+          spawnX=secondX+50+tailGap; lastAction='duck';
         } else {                                             // K3: rep + block - skjut och hoppa i sekvens
-          const kgap=speed*SHORT_AIRTIME+40;                 // kort hopp racker for ett lagt block
           obstacles.push({type:'rope',x:spawnX,w:ROPE_W,cut:false,fallY:0,fallV:0,cutY:0});
-          obstacles.push({type:'ground',x:spawnX+ROPE_W+kgap,y:GROUND_Y,w:30,h:30});
-          spawnX+=ROPE_W+kgap+30+tailGap; lastAction='jump';
+          obstacles.push({type:'ground',x:secondX,y:GROUND_Y,w:30,h:30});
+          spawnX=secondX+30+tailGap; lastAction='jump';
         }
         lastWasRope=false; return;
       }
+      // annars: inte fritt for kombo -> fall igenom till normal enstaka hinder-spawn nedan
     }
     const preSpawnX=spawnX;
     const t=Math.min(1,(speed-SPD_START)/300);
@@ -1466,7 +1470,10 @@
         continue; }
       if(cn.sat){ ctx.save(); ctx.globalAlpha=0.22+0.18*Math.abs(Math.sin(cn.bob*7)); ctx.fillStyle='#e8ecf0';
         ctx.beginPath(); ctx.arc(cn.x,cy,cw*0.62,0,Math.PI*2); ctx.fill(); ctx.restore();
-        ctx.fillStyle='#c7cdd3'; ctx.fillRect(cn.x-cw/2,cy-ch/2,cw,ch);
+        const sd=cw*0.8;                     // diamant-sidlangd (kvadrat roterad 45 grader)
+        ctx.save(); ctx.translate(cn.x,cy); ctx.rotate(Math.PI/4);
+        ctx.fillStyle='#c7cdd3'; ctx.fillRect(-sd/2,-sd/2,sd,sd);
+        ctx.restore();
         ctx.fillStyle='#ffffff'; ctx.globalAlpha=0.55+0.45*Math.abs(Math.sin(cn.bob*9));
         ctx.fillRect(cn.x-cw*0.20,cy-ch*0.28,3,3); ctx.globalAlpha=1;
         continue; }
