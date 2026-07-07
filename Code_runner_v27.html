@@ -246,7 +246,7 @@
   let playerName='ANON', coins=0, runesGot=0; const COIN_VAL=25;
   let lbFallback=[{n:'MIO',s:1450},{n:'SATOSHI',s:1120},{n:'ORDINAL',s:880},{n:'BLOCK',s:610},{n:'DEGEN',s:420}];
   function esc(t){return String(t).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
-  let player,obstacles,particles,spawnX,bgScroll,shakeT,flashT,coinsArr,coinTimer,lastAction;
+  let player,obstacles,particles,spawnX,bgScroll,shakeT,flashT,coinsArr,coinTimer,lastAction,lastWasRope;
   let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0;
   let igrace=0,exhaustedT=0;
   let bonus=0,blockHeight,blockFill,chain,surge,txArr,txTimer,confirmMsgT,txPops;
@@ -560,7 +560,7 @@
     // valj typ + vilken handling den kraver (jump/duck)
     let type, action='jump';
     if((level===5?lvlDist>1500:(level===6||level>=10)) && charges>0 && r<0.15){ type='mtn'; }
-    else if((level===2 || (level===5?lvlDist>1500:(level===6||level>=10))) && r<0.30){ type='rope'; }
+    else if((level===2 || (level===5?lvlDist>1500:(level===6||level>=10))) && r<0.30 && !lastWasRope){ type='rope'; }
     else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):0.38);
       if(r<1-airP){ type='ground'; } else { type='air'; action='duck'; } }
     // luckor: mer luft tidigt, extra nar man maste byta stallning (ducka<->hoppa)
@@ -568,6 +568,7 @@
     const maxGap=minGap+150+t*60;
     let gap=minGap+Math.random()*(maxGap-minGap);
     if(action!==lastAction) gap+=130-t*50;             // extra nar man maste byta stallning
+    if(lastWasRope) gap+=120;                          // extra avstand efter ett rep
     if(fallers.some(fb=>fb.state!=='landed' && Math.abs((fb.landX!=null?fb.landX:fb.x)-spawnX)<220)) gap+=200;   // hall undan fran en fallande kloss landningszon
     if(type==='mtn'){
       obstacles.push({type:'mtn',x:spawnX,w:MTN_W,hp:3,runeGot:false});
@@ -587,7 +588,7 @@
       obstacles.push({type:'air',x:spawnX,bottom:GROUND_Y-BAR_BOTTOM_OFF,w:bw,h:240});
       spawnX+=bw+gap;
     }
-    lastAction=action;
+    lastAction=action; lastWasRope=(type==='rope');
   }
   function spawnDrone(){ if(!DRONE_ENABLED)return; drone={x:W+80,y:GROUND_Y-260,phase:'in',t:0,bob:0,beamY:GROUND_Y-BAR_BOTTOM_OFF}; }
 
