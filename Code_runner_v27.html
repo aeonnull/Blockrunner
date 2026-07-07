@@ -199,9 +199,9 @@
   const H_STAND=140, H_DUCK=59, P_W=70;            // real sprite (aspect 0.5)
   const SPD_START=189, SPD_RAMP=2.8, SPD_MAX=610;
   const DRONE_ENABLED=false;                       // sla pa dronaren igen genom att satta true
-  const LVL_LEN=[0,4500,15000,15000,18000,16000,20000,16000,18000,999999,23000,999999];
+  const LVL_LEN=[0,4500,7500,15000,18000,16000,20000,16000,18000,999999,23000,999999];
   const LVL_SPD=[0,205,221,232,248,243,265,254,275,281,297,313];
-  const LVL_HINT=['','JUMP \u25b2 HOLD=HIGHER  DUCK \u25bc  SHOOT \u2726=ROPES','NEW: DRONE \u2014 duck the beam \u00b7 find the \u2665','NEW: FALLING BLOCKS \u2014 watch the mark','COMBINE.','NEW: SHOOT \u2726 \u2014 cut the ropes','EVERYTHING. FASTER.','DISTRICT: ROOFTOPS','ROOFTOPS + FALLING SKY','BIP 110 AWAITS','ALL OF IT.','THE CITY IS YOURS'];
+  const LVL_HINT=['','JUMP \u25b2 HOLD=HIGHER  DUCK \u25bc  SHOOT \u2726=ROPES','SHOOT \u2726=ROPES \u00b7 GOLD RUNE = 5 \u20bf, GRAB FAST','NEW: FALLING BLOCKS \u2014 watch the mark','COMBINE.','NEW: SHOOT \u2726 \u2014 cut the ropes','EVERYTHING. FASTER.','DISTRICT: ROOFTOPS','ROOFTOPS + FALLING SKY','BIP 110 AWAITS','ALL OF IT.','THE CITY IS YOURS'];
   const BAR_BOTTOM_OFF=108;
   const ROPE_W=10, ROPE_BOTTOM_OFF=10;
   const HAM_W=46, HAM_AR=0.366, HAM_Y_OFF=250, ZAP_AR=0.799;
@@ -243,7 +243,7 @@
   const BLOCK_START=873421;
 
   let state='start',speed,dist,score,best=0;
-  let playerName='ANON', coins=0; const COIN_VAL=25;
+  let playerName='ANON', coins=0, runesGot=0; const COIN_VAL=25;
   let lbFallback=[{n:'MIO',s:1450},{n:'SATOSHI',s:1120},{n:'ORDINAL',s:880},{n:'BLOCK',s:610},{n:'DEGEN',s:420}];
   function esc(t){return String(t).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
   let player,obstacles,particles,spawnX,bgScroll,shakeT,flashT,coinsArr,coinTimer,lastAction;
@@ -263,7 +263,7 @@
     speed=LVL_SPD[Math.min(level,11)]; heartLvlDone=false; waterDone=false;
     plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400;
     if(zone==='roof')roofRuns++; fireT=0; fireCd=0; hammer=null; hammerTimer=14; zapT=0; charges=0; swingT=0; swingTarget=null; swingHit=false;
-    coinsArr=[]; coinTimer=2.0; coins=0;
+    coinsArr=[]; coinTimer=2.0; coins=0; runesGot=0;
     bonus=0; blockHeight=BLOCK_START; blockFill=0.40; chain=[]; surge=null; txArr=[]; txTimer=2.2; confirmMsgT=0; txPops=[];
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL starts every level shielded
@@ -560,7 +560,7 @@
     // valj typ + vilken handling den kraver (jump/duck)
     let type, action='jump';
     if((level===5?lvlDist>1500:(level===6||level>=10)) && charges>0 && r<0.15){ type='mtn'; }
-    else if((level===5?lvlDist>1500:(level===6||level>=10)) && r<0.30){ type='rope'; }
+    else if((level===2 || (level===5?lvlDist>1500:(level===6||level>=10))) && r<0.30){ type='rope'; }
     else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):0.38);
       if(r<1-airP){ type='ground'; } else { type='air'; action='duck'; } }
     // luckor: mer luft tidigt, extra nar man maste byta stallning (ducka<->hoppa)
@@ -767,7 +767,7 @@
     if(player.y>H+60){die('pit');return;}
     updateMempool(dt);
     document.getElementById('scoreVal').textContent=score;
-    document.getElementById('coinVal').textContent='\u20BF '+coins;
+    document.getElementById('coinVal').textContent='\u20BF '+coins+'  R'+runesGot;
 
     if(buffer>0)buffer-=dt;
     if(player.onGround)coyote=COYOTE; else if(coyote>0)coyote-=dt;
@@ -906,7 +906,7 @@
       if(!cn.got && !_cEx){ const ph2=curH(), gx=cn.rune?34:30, gy=cn.rune?34:26, cy=cn.y+Math.sin(cn.bob*4)*6;
         if(player.x<cn.x+gx && player.x+P_W>cn.x-gx && player.y-ph2<cy+gy && player.y>cy-gy){
           cn.got=true;
-          if(cn.rune){ coins+=RUNE_BTC; coinSfx(); flashT=Math.max(flashT,0.10); shakeT=Math.max(shakeT,0.16);
+          if(cn.rune){ coins+=RUNE_BTC; runesGot++; coinSfx(); flashT=Math.max(flashT,0.10); shakeT=Math.max(shakeT,0.16);
             popText(cn.x,cy-30,'+'+RUNE_BTC+' \u20BF','#ffd24a');
             for(let i=0;i<30;i++)particles.push({x:cn.x,y:cy,vx:(Math.random()-0.5)*440,vy:-Math.random()*400,life:0.45+Math.random()*0.45,c:Math.random()<0.6?'#f7a000':'#ffe08a',s:4+Math.random()*5}); }
           else { coins++; coinSfx();
