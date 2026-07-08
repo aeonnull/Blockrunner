@@ -199,7 +199,7 @@
   const H_STAND=140, H_DUCK=59, P_W=70;            // real sprite (aspect 0.5)
   const SPD_START=189, SPD_RAMP=2.8, SPD_MAX=610;
   const DRONE_ENABLED=false;                       // sla pa dronaren igen genom att satta true
-  const LVL_LEN=[0,4500,7500,7500,18000,16000,20000,16000,18000,999999,23000,999999];
+  const LVL_LEN=[0,4500,7500,9000,18000,16000,20000,16000,18000,999999,23000,999999];
   const LVL_SPD=[0,205,221,232,248,243,265,254,275,281,297,313];
   const LVL_HINT=['','JUMP \u25b2 HOLD=HIGHER  DUCK \u25bc  SHOOT \u2726=ROPES','SHOOT \u2726=ROPES \u00b7 GOLD RUNE = 5 \u20bf, GRAB FAST','NEW: FALLING BLOCKS \u2014 watch the mark','COMBINE.','NEW: SHOOT \u2726 \u2014 cut the ropes','EVERYTHING. FASTER.','DISTRICT: ROOFTOPS','ROOFTOPS + FALLING SKY','BIP 110 AWAITS','ALL OF IT.','THE CITY IS YOURS'];
   const BAR_BOTTOM_OFF=108;
@@ -621,8 +621,8 @@
         } else { spawnX-=iMaxGap; }                                   // annars: forsok igen nasta anrop
       }
     }
-    // ---------- KOMBOBIBLIOTEK (niva 2 och 3): tre handdesignade monster, ~var tredje spawn ----------
-    if((level===2||level===3) && Math.random()<0.33){
+    // ---------- KOMBOBIBLIOTEK (niva 2 och 3): tre handdesignade monster; niva 3 glesare (0.22) sa den inte kanns som niva 2 ----------
+    if((level===2||level===3) && Math.random()<(level===3?0.22:0.33)){
       const ct=Math.min(1,(speed-SPD_START)/300);
       const tMinGap=Math.max(380-ct*40, speed*0.82+80), tMaxGap=tMinGap+150+ct*60;
       const tailGap=tMinGap+Math.random()*(tMaxGap-tMinGap);
@@ -660,7 +660,7 @@
     let type, action='jump';
     if((level===5?lvlDist>1500:(level===6||level>=10)) && charges>0 && r<0.15){ type='mtn'; }
     else if(!lastWasRope && ((level===2 && r<0.40) || ((level===5?lvlDist>1500:(level===6||level>=10)) && r<0.30))){ type='rope'; }
-    else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):0.38);
+    else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):(level===3?0.46:0.38));   // niva 3: hogre duck-andel (0.46) -> egen hopp/duck-rytm mot niva 2
       if(r<1-airP){ type='ground'; } else { type='air'; action='duck'; } }
     // luckor: mer luft tidigt, extra nar man maste byta stallning (ducka<->hoppa)
     const minGap=Math.max(380-t*40, speed*0.82+80);   // landningsrum skalar med farten -> aldrig kortare an ett hopp
@@ -809,11 +809,14 @@
       if(fallX<=0){ const fx=player.x+300+Math.random()*240;
         const warnT=(level===3?1.0:0.65), fallFlightT=(level===3?1.70:1.35);   // niva 3: langre varning 1.0s; landX-estimat matchar (1.0 varning + 0.70 falltid)
         const landX=fx-speed*fallFlightT, safeGap=Math.max(180,speed*0.85);
-        const clear = !obstacles.some(o=>Math.abs(o.x-fx)<safeGap || Math.abs(o.x-landX)<safeGap)
+        const clear = (level===3
+            ? !obstacles.some(o=>Math.abs(o.x-landX)<safeGap)                                 // niva 3: langre flygtid gor fx..landX-korridoren (~788px) bredare an hinderavstandet -> skydda BARA landningszonen (falltidens svep ryms i landX±safeGap), annars uteblir blocken
+            : !obstacles.some(o=>Math.abs(o.x-fx)<safeGap || Math.abs(o.x-landX)<safeGap))
           && !gaps.some(g=>(fx>g.x-60&&fx<g.x+g.w+60) || (landX>g.x-80&&landX<g.x+g.w+80))
           && !plats.some(p=>(p.roof||level===3)&&((fx>p.x-70&&fx<p.x+p.w+70) || (landX>p.x-90&&landX<p.x+p.w+90)));   // niva 3: undvik aven sat-plattformen (icke-roof)
         if(clear) fallers.push({x:fx,y:-60,vy:0,state:'warn',t:0,landX,warnT});
-        fallX=900+Math.random()*800; } }
+        // niva 3: fallande block ar nivans signum -> tatare cooldown (600-1050 px); blockerat forsok gor snabbt omforsok (90 px) istallet for att branna hela cooldownen
+        fallX = level===3 ? (clear ? 600+Math.random()*450 : 90) : 900+Math.random()*800; } }
     for(const fb of fallers){ fb.x-=speed*dt; fb.t+=dt;
       if(fb.state==='warn'){ if(fb.t>(fb.warnT||0.65)){fb.state='fall';} }
       else if(fb.state==='fall'){ fb.vy+=2600*dt; fb.y+=fb.vy*dt;
@@ -849,7 +852,7 @@
             && !fallers.some(fb=>fb.state!=='landed' && Math.abs((fb.landX!=null?fb.landX:fb.x)-satBx)<satSafeGap);   // undvik fallande blocks landningszon (niva 3; tom pa niva 2)
           if(satClear){
             plats.push({x:satBx,top:GROUND_Y-SAT_BLOCK_H,w:SAT_BLOCK_W});
-            coinsArr.push({x:satBx+SAT_BLOCK_W/2,y:GROUND_Y-(SAT_BLOCK_H+SAT_ABOVE_BLOCK),bob:0,got:false,sat:true});
+            coinsArr.push({x:satBx+SAT_BLOCK_W/2+100,y:GROUND_Y-(SAT_BLOCK_H+SAT_ABOVE_BLOCK),bob:0,got:false,sat:true});   // +100 px: saten ligger ~en apex-scroll EFTER blockets mitt -> blocket hinner fram forst, spelaren monterar det och hoppar direkt upp mot saten
             rareSatSpawned=true;
           }
         }
@@ -1124,7 +1127,7 @@
 
   // ---------- draw ----------
   function drawBackground(){
-    ctx.fillStyle=(level===3?'#f2a96e':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: aprikos himmel (byte exakt vid nivaovergang 2->3 och 3->4)
+    ctx.fillStyle=(level===3?'#855d3d':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: morkare aprikos himmel (~45% morkare an f2a96e; byte exakt vid nivaovergang 2->3 och 3->4)
     if(blueBlend>0.01){ ctx.globalAlpha=0.30*blueBlend; ctx.fillStyle='#1a3a7a'; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1; }
     if(zoneBlend>0.01){
       ctx.globalAlpha=zoneBlend; ctx.fillStyle='#5b1b20'; ctx.fillRect(0,0,W,H);
@@ -1135,8 +1138,8 @@
       ctx.globalAlpha=1;
     }
     if(level===3){                                        // niva 3: Gamla Stockholm-siluett (tinnar och torn) ersatter skyskrapssiluetten
-      drawOldTown(bgScroll*0.25,190,'#9c6a46','#e0a33c',84);
-      drawOldTown(bgScroll*0.5,140,'#6f4630','#caa15f',60);
+      drawOldTown(bgScroll*0.25,190,'#563a27','#7b5a21',84);   // ~45% morkare an tidigare (behaller aprikos/varm ton)
+      drawOldTown(bgScroll*0.5,140,'#3d271a','#6f5934',60);
     } else {
       drawSkyline(bgScroll*0.25,200,'#0c1620',80,9000);
       drawSkyline(bgScroll*0.5,150,'#0a1118',58,4500);
