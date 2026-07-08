@@ -227,6 +227,8 @@
   const MTN_W=140, MTN_H=210, SWING_T=0.30, SWING_HIT=0.12;
   // niva 5: dynamit (kastad, ersatter narstridssvepet dar) + krossbara industrihinder
   const DYN_W=20, DYN_H=26, DYN_VX=560, DYN_VY0=-540, DYN_GRAV=2000, DYN_HIT_R=32, BOOM_T=0.28;
+  const DYN_DRAW=1.4;                 // niva 5: dynamitens RITSTORLEK +40% (bade kastad sprite och pickup). Kastbana/DYN_VX/DYN_VY0/DYN_GRAV samt hitbox (DYN_HIT_R) ar oberoende och OROR.
+  const DYN_PICK_AMMO=2;              // en dynamit-pickup ger 2 kast
   const CRATE_W=34, CRATE_H=40;
   const btcImg=new Image();  btcImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAYAAACtrX6oAAAAuElEQVR4nO3cUQ3CQBBAwS3BIAqwgpUqQAuKighSmrybUbDJy/3sJbsd7+cxC9ke+3b1DP90u3oAziVwnMBxAscJHCdwnMBxAscJHCdwnMBx9/nsV8/AibzgOIHjBI4TOE7gOIHjBI4TOE7gOIHjBAYAAAAAAH6y1L2KmZnVbpL4TYoTOE7gOIHjBI4TOE7gOIHjBI4TOE7guPV20a+xi6ZD4DiB4wSOEzhO4DiB4wSOEzhO4DiB477KyAtcOLpWZgAAAABJRU5ErkJggg==';
   const btcgImg=new Image(); btcgImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABmCAYAAAAAuFU5AAAA70lEQVR4nO3dwQ2CQBBAUdbYoBVYGxVYixVpCW4MCP68d+Ywyc9eNgyM5U+9HvfXp2fGbR2/mOXMLkcPwL4EjhM4TuA4geMEjhM4TmAAAAAAAAAAAIDtjJkdnzOydzTHS3dxAscJHCdwnMBxAscJHCdw3HV5rkfPwI6c4DiB4wSOEzhO4DiB4wSOExgAAAAAOIG/3e+xUzXHXXScwHECxwkcJ3CcwHECxwkcdz16gK/ZqZq67HGC4wSOEzhO4DiB4wSOEzhOYAAAAAAAAAAAgO38/CMsM/s0fv68HS/dxQkcJ3CcwHECxwkcJ3CcwHFvIdIWXVs6RQgAAAAASUVORK5CYII=';
@@ -256,7 +258,7 @@
   let lbFallback=[{n:'MIO',s:1450},{n:'SATOSHI',s:1120},{n:'ORDINAL',s:880},{n:'BLOCK',s:610},{n:'DEGEN',s:420}];
   function esc(t){return String(t).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
   let player,obstacles,particles,spawnX,bgScroll,shakeT,flashT,coinsArr,coinTimer,lastAction,lastWasRope;
-  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0,rareSatRolled=false,rareSatWillSpawn=false,rareSatSpawned=false,rareSatCollectedThisLevel=false,introBlockSpawned=false,lvlRuneSpawned=false,lvlRuneTriggerAt=0,l3ArcHigh=false,dynamites=[],mtnSpawned=false,mtnTriggerAt=0,rockHintT=0,l5ArcFlat=false;
+  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0,rareSatRolled=false,rareSatWillSpawn=false,rareSatSpawned=false,rareSatCollectedThisLevel=false,introBlockSpawned=false,lvlRuneSpawned=false,lvlRuneTriggerAt=0,l3ArcHigh=false,dynamites=[],mtnSpawned=false,mtnTriggerAt=0,rockHintT=0,l5ArcFlat=false,dynAmmo=0,dynPickups=[],dynTeachSpawned=false,dynPreMtnSpawned=false,dynScatterTimer=0;
   let igrace=0,exhaustedT=0;
   let bonus=0,blockHeight,blockFill,chain,surge,txArr,txTimer,confirmMsgT,txPops;
 
@@ -279,9 +281,12 @@
     bonus=0; blockHeight=BLOCK_START; blockFill=0.40; chain=[]; surge=null; txArr=[]; txTimer=2.2; confirmMsgT=0; txPops=[];
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL starts every level shielded
+    dynReset();
     if(demo && level===11){ speed=440; bossTimer=5; hammerTimer=3; }   // demo: visa hammare + gatuboss snabbt istallet for efter 24s
   }
   function curH(){ return ducking && player.onGround ? H_DUCK : H_STAND; }
+  // niva 5: dynamit-ammo/pickups nollstalls vid varje nivastart (spelaren startar med 0 dynamit)
+  function dynReset(){ dynAmmo=0; dynPickups=[]; dynTeachSpawned=false; dynPreMtnSpawned=false; dynScatterTimer=6.5; }
 
   // ---------- AUDIO: faint chiptune of "Korobeiniki" (1861 folk tune, public domain) ----------
   let audioCtx=null, master=null, musicOn=true, noteIdx=0, nextT=0, schedStarted=false;
@@ -422,8 +427,8 @@
     if(best){ fireT=0.34; best.cut=true; best.cutY=beamY; best.fallV=0; best.fallY=0;
       for(let i=0;i<18;i++)particles.push({x:best.x+ROPE_W/2,y:beamY,vx:(Math.random()-0.2)*280,vy:(Math.random()-0.5)*280,life:0.3+Math.random()*0.25,c:Math.random()<0.6?'#19E6A0':'#BFF6E2',s:4+Math.random()*4});
     } else if(level===5){
-      // niva 5: inget rep i omedelbar vag -> kasta dynamit istallet (fritt, ingen ammo). Egen kastbana, ingen paverkan pa fireT (ingen pistolvisual).
-      dynamites.push({x:player.x+P_W*0.55,y:player.y-H_STAND*0.62,vx:DYN_VX,vy:DYN_VY0,state:'fly',t:0});
+      // niva 5: inget rep i omedelbar vag -> kasta dynamit istallet (kraver ammo). Rep-klippning ovan gar ALLTID, oberoende av ammo. Egen kastbana, ingen paverkan pa fireT (ingen pistolvisual). Tomt forrad -> ingenting (ingen pistol-flash).
+      if(dynAmmo>0){ dynamites.push({x:player.x+P_W*0.55,y:player.y-H_STAND*0.62,vx:DYN_VX,vy:DYN_VY0,state:'fly',t:0}); dynAmmo--; }
     } else {
       fireT=0.34;
       for(let i=0;i<6;i++)particles.push({x:player.x+95,y:beamY,vx:Math.random()*220+70,vy:(Math.random()-0.5)*120,life:0.2+Math.random()*0.15,c:'#19E6A0',s:3+Math.random()*3});
@@ -498,7 +503,7 @@
 
   function enterCleared(){
     state='cleared'; clearedT=0; bonus+=150*bmult();
-    obstacles=[]; gaps=[]; drone=null; boss=null; roofBoss=null; surge=null; stars=[]; ropeBalls=[]; lanterns=[]; plats=[]; hearts=[]; fallers=[]; dynamites=[];
+    obstacles=[]; gaps=[]; drone=null; boss=null; roofBoss=null; surge=null; stars=[]; ropeBalls=[]; lanterns=[]; plats=[]; hearts=[]; fallers=[]; dynamites=[]; dynPickups=[];
     player.y=GROUND_Y; player.vy=0; player.onGround=true; ducking=false;
   }
   function confirmNext(){
@@ -517,6 +522,7 @@
     if(level===5) charges=0;   // niva 5: dynamit ersatter hammar-svepet, ingen kvarhangande charge ska kunna trigga det gamla svepet
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL is re-shielded on each new level
+    dynReset();
     if(typeof refreshLvlSel==='function') refreshLvlSel();
   }
   function restartLevel(){
@@ -538,6 +544,7 @@
     surge=null;
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;
+    dynReset();
     state='run';
   }
   function die(cause){
@@ -829,6 +836,13 @@
         popText(ht.x,ht.y-30,'\u2665','#f0889a');
         for(let i=0;i<14;i++)particles.push({x:ht.x,y:ht.y,vx:(Math.random()-0.5)*300,vy:(Math.random()-0.8)*300,life:0.4+Math.random()*0.3,c:Math.random()<0.5?'#e03a3a':'#f0889a',s:3+Math.random()*3}); } }
     hearts=hearts.filter(ht=>!ht.got&&ht.x>-40);
+    // ---------- DYNAMIT-PICKUPS (endast niva 5): auto-plockas nar spelaren loper igenom dem (ingen knapp), +DYN_PICK_AMMO kast styck ----------
+    for(const dp of dynPickups){ dp.x-=speed*dt; dp.bob+=dt;
+      if(!dp.got && Math.abs(dp.x-(player.x+P_W/2))<46 && Math.abs(dp.y-(player.y-curH()*0.5))<58){
+        dp.got=true; dynAmmo+=DYN_PICK_AMMO;
+        popText(dp.x,dp.y-30,'+'+DYN_PICK_AMMO+' ▴','#ff9a1f');
+        for(let i=0;i<16;i++)particles.push({x:dp.x,y:dp.y,vx:(Math.random()-0.5)*320,vy:(Math.random()-0.8)*320,life:0.35+Math.random()*0.3,c:Math.random()<0.5?'#ff9a1f':'#c81a1a',s:3+Math.random()*3}); } }
+    dynPickups=dynPickups.filter(dp=>!dp.got&&dp.x>-40);
     // ---------- FALLING BLOCKS ----------
     const fallOK = ((level===3&&lvlDist>1500)||level===6||(level===7&&lvlDist>2000)||level===8||level>=10) && !gaps.some(g=>g.water);   // niva 4 undantagen: fallande block ar niva 3:s signum, inte niva 4:s
     if(fallOK && !roofBoss && !surge){ fallX-=speed*dt;
@@ -898,10 +912,37 @@
         }
       }
     }
+    // ---------- DYNAMIT-PICKUPS SPAWN (endast niva 5) ----------
+    if(level===5 && zone==='street'){
+      const dpY=GROUND_Y-70;                                    // lophojd: staende spelares mitt = GROUND_Y-H_STAND/2 = GROUND_Y-70 -> auto-plockas vid genomlopning, inget hopp kravs
+      const dpClear=(bx)=> !obstacles.some(o=>Math.abs(o.x-bx)<180)
+          && !gaps.some(g=>bx>g.x-70 && bx<g.x+g.w+70)
+          && !plats.some(p=>bx>p.x-80 && bx<p.x+p.w+80)
+          && !dynPickups.some(q=>Math.abs(q.x-bx)<80);          // aldrig staplade pickups
+      // 1) GARANTERAD LARO-PICKUP tidigt (langt fore berget; mtnTriggerAt >= 0.30*9000 = 2700). Ensam i fri vag sa spelaren lar sig vad dynamit ar.
+      if(!dynTeachSpawned && lvlDist>700){
+        const bx=W+60; if(dpClear(bx)){ dynPickups.push({x:bx,y:dpY,bob:0,got:false}); dynTeachSpawned=true; }
+        else if(lvlDist>1700){ dynTeachSpawned=true; }          // sakerhetsventil: sluta forsoka om aldrig fritt (pre-berg-paret + scatter garanterar anda ammo)
+      }
+      // 2) GARANTERAT PRE-BERG-PAR: tva pickups (=4 kast) placerade ~900 lvlDist FORE berget, i den rena korridoren (berget-zonen halls fri av spawn-skyddet).
+      //    Paret spawnar ALLTID fore berget (berget nedan kraver dynPreMtnSpawned) och ligger narmare spelaren an berget -> plockas alltid forst. Ger garanterat >=4 kast vid berget (hp 3, marginal 1).
+      if(!dynPreMtnSpawned && !mtnSpawned && lvlDist>mtnTriggerAt-900){
+        const bx=W+60; if(dpClear(bx) && dpClear(bx+90)){
+          dynPickups.push({x:bx,y:dpY,bob:0,got:false});
+          dynPickups.push({x:bx+90,y:dpY,bob:0.5,got:false});
+          dynPreMtnSpawned=true; }
+      }
+      // 3) UTSPRIDDA EXTRA-PICKUPS langs banan
+      dynScatterTimer-=dt;
+      if(dynScatterTimer<=0){
+        const bx=W+60; if(dpClear(bx)){ dynPickups.push({x:bx,y:dpY,bob:0,got:false}); dynScatterTimer=7+Math.random()*4; }
+        else dynScatterTimer=0.4;                               // inte fritt just nu -> forsok snart igen
+      }
+    }
     // ---------- GARANTERAT BERG (niva 5): berget spawnas EN gang, sprangs med dynamit, ger nivans garanterade runa (ateranvander bergets befintliga hp/bonus/runa-logik, se svep- och dynamit-koden) ----------
     if(level===5 && zone==='street' && !mtnSpawned){
       if(lvlDist>=LVL_LEN[Math.min(level,10)]*0.75){ mtnSpawned=true; }
-      else if(lvlDist>mtnTriggerAt){
+      else if(lvlDist>mtnTriggerAt && dynPreMtnSpawned){        // berget dyker aldrig upp innan dess garanterade dynamit-par ligger ute -> spelaren har alltid ammo nar berget nas
         const mtnBx=W+420, mtnSafeGap=Math.max(220,speed*0.9);   // annan bx-offset an saten (W+260)/runan (W+80) sa de sallan konkurrerar om samma skarmposition
         const mtnClear = !obstacles.some(o=>Math.abs(o.x-mtnBx)<mtnSafeGap)
           && !gaps.some(g=>mtnBx>g.x-60 && mtnBx<g.x+g.w+60)
@@ -1675,10 +1716,10 @@
     else { ctx.fillStyle='#c9d6dc'; ctx.fillRect(-hw/2,-hh/2,hw,hh*0.5); }
     ctx.restore();
   }
-  // niva 5: dynamitbunt (3-4 rода stavar, svart mittband, glodande stubiner, morkare hogersida = skugga/djup), ritad i kod
-  function drawDynamite(d){
-    const w=DYN_W, h=DYN_H, nStick=4, sw=w/nStick;
-    ctx.save(); ctx.translate(d.x,d.y); ctx.rotate(d.t*9);
+  // niva 5: dynamitbunt (3-4 rода stavar, svart mittband, glodande stubiner, morkare hogersida = skugga/djup), ritad i kod.
+  // Ritas centrerad i origo. w/h skickas in ferdigskalade (DYN_DRAW = +40%). Alla dekorationer skalas med s=w/DYN_W sa hela spriten vaxer proportionellt.
+  function drawDynBundle(w,h,tg){
+    const nStick=4, sw=w/nStick, s=w/DYN_W;
     for(let i=0;i<nStick;i++){
       const sx=-w/2+i*sw;
       ctx.fillStyle=(i===nStick-1)?'#7a1010':'#c81a1a';
@@ -1687,12 +1728,25 @@
     ctx.fillStyle='#0c0c0c'; ctx.fillRect(-w/2,-h/2+h*0.30,w,h*0.13);
     for(let i=0;i<nStick;i++){
       const sx=-w/2+i*sw+sw*0.5;
-      ctx.fillStyle='#0c0c0c'; ctx.fillRect(sx-1,-h/2-6,2,6);
-      const glow=0.5+0.5*Math.abs(Math.sin(d.t*20+i));
+      ctx.fillStyle='#0c0c0c'; ctx.fillRect(sx-1*s,-h/2-6*s,2*s,6*s);
+      const glow=0.5+0.5*Math.abs(Math.sin(tg*20+i));
       ctx.fillStyle=glow>0.75?'#fff3b0':'#ff9a1f';
-      ctx.fillRect(sx-1.5,-h/2-8,3,3);
+      ctx.fillRect(sx-1.5*s,-h/2-8*s,3*s,3*s);
     }
+  }
+  function drawDynamite(d){
+    ctx.save(); ctx.translate(d.x,d.y); ctx.rotate(d.t*9);
+    drawDynBundle(DYN_W*DYN_DRAW,DYN_H*DYN_DRAW,d.t);
     ctx.restore();
+  }
+  // niva 5: dynamit-pickup - SAMMA utseende som kastad dynamit (+40%), sa kopplingen pickup->vapen ar sjalvklar. Svavar/guppar med en varm glorja under.
+  function drawDynPickups(){
+    for(const dp of dynPickups){ if(dp.got)continue; const y=dp.y+Math.sin(dp.bob*3)*5;
+      ctx.save(); ctx.globalAlpha=0.5; ctx.fillStyle='#ff9a1f';
+      ctx.beginPath(); ctx.ellipse(dp.x,y+DYN_H*DYN_DRAW*0.5+4,DYN_W*DYN_DRAW*0.62,5,0,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=1; ctx.restore();
+      ctx.save(); ctx.translate(dp.x,y); drawDynBundle(DYN_W*DYN_DRAW,DYN_H*DYN_DRAW,dp.bob); ctx.restore();
+    }
   }
   function drawExplosion(d){
     const t=d.boomT/BOOM_T, a=Math.max(0,1-t), s=14+t*30, s2=8+t*24;
@@ -1855,7 +1909,7 @@
   function render(){
     ctx.save();
     if(shakeT>0){const m=shakeT*46;ctx.translate((Math.random()-0.5)*m,(Math.random()-0.5)*m);}
-    drawBackground();drawObstacles();drawDrone();drawDuel();drawHammer();drawDynamites();drawCoins();drawTx();
+    drawBackground();drawObstacles();drawDrone();drawDuel();drawHammer();drawDynamites();drawDynPickups();drawCoins();drawTx();
     { let _ga=1; if(exhaustedT>0||igrace>0){ _ga=(Math.floor((exhaustedT+igrace)*12)%2===0)?0.35:0.8; ctx.globalAlpha=_ga; } drawPlayer(); if(_ga<1)ctx.globalAlpha=1; }
     drawSwing();drawParticles();
     ctx.restore();
@@ -1874,6 +1928,11 @@
       ctx.fillStyle='#9a9a9a'; ctx.fillRect(x,y,16,9);
       ctx.fillStyle='#6b6b6b'; ctx.fillRect(x+1,y+1,4,7);
       ctx.fillStyle='#6b3f17'; ctx.fillRect(x+6,y+9,4,13); } }
+    // niva 5: DYNAMIT-AMMO-raknare, top-left UNDER hjart-raden (y130). Krockar aldrig med hjartan/mynt(top-right)/block-HUD(top-center)/kombo. Endast niva 5.
+    if(level===5 && state==='run'){ const ax=24, ay=156;
+      ctx.save(); ctx.translate(ax,ay); drawDynBundle(DYN_W*0.85,DYN_H*0.85,performance.now()/1000); ctx.restore();
+      ctx.fillStyle=dynAmmo>0?'#ff9a1f':'#7a5a3a'; ctx.font='700 14px monospace'; ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+      ctx.fillText('×'+dynAmmo, ax+14, ay+5); ctx.textAlign='left'; }
   }
   const BOT_AIRTIME=0.813;   // full-jump hang time (2*|JUMP_V|/GRAV)
   function botThink(dt){
@@ -2054,6 +2113,9 @@
         elev:player?Math.round(GROUND_Y-player.y):0,roofStrips:plats.filter(p=>p.roof).length,
         bossCycle:roofBoss?roofBoss.cycle:null,bossTarget:roofBoss?(roofBoss.cycleTarget||3):null,
         balls:ropeBalls.length,ballX:ropeBalls.length?Math.round(ropeBalls[0].x-player.x):null,ducking,
+        dynAmmo,dynPk:dynPickups.filter(p=>!p.got).length,runesGot,
+        mtnHp:(()=>{const m=obstacles.filter(o=>o.type==='mtn'&&o.hp>0).sort((a,b)=>a.x-b.x)[0];return m?m.hp:null;})(),
+        mtnDx:(()=>{const m=obstacles.filter(o=>o.type==='mtn'&&o.hp>0).sort((a,b)=>a.x-b.x)[0];return m?Math.round(m.x-(player.x+P_W)):null;})(),
         phase:(roofBoss&&('roof:'+roofBoss.phase))||(boss&&('boss:'+boss.phase))||(drone&&('drone:'+drone.phase))||null}),
       play:(n)=>{ demo=true; startLevel=Math.max(1,Math.min(11,n|0)); maxLevel=Math.max(maxLevel,startLevel); start(); },
       setDemo:(b)=>{ demo=!!b; },
@@ -2065,7 +2127,7 @@
       // spawn a pickup relative to the player's centre (dx px ahead, dy px below player-mid)
       spawnCoinAt:(dx,dy)=>{ if(state==='run')coinsArr.push({x:player.x+P_W/2+(dx==null?260:dx),y:player.y-curH()*0.5+(dy||0),bob:0,got:false}); },
       spawnHeartAt:(dx,dy)=>{ if(state==='run')hearts.push({x:player.x+P_W/2+(dx==null?260:dx),y:player.y-curH()*0.5+(dy||0),bob:0,got:false}); },
-      clearPickups:()=>{ coinsArr.length=0; hearts.length=0; },
+      clearPickups:()=>{ coinsArr.length=0; hearts.length=0; dynPickups.length=0; },
       clearObstacles:()=>{ obstacles.length=0; gaps.length=0; drone=null; boss=null; roofBoss=null; surge=null; ropeBalls.length=0; fallers.length=0; dynamites.length=0; },
       coinInfo:()=>({n:coinsArr.length,coins,dx:coinsArr[0]?Math.round(coinsArr[0].x-(player.x+P_W/2)):null,cy:coinsArr[0]?Math.round(coinsArr[0].y):null}),
       heartInfo:()=>({n:hearts.length,heartsGot,dx:hearts[0]?Math.round(hearts[0].x-(player.x+P_W/2)):null}),
