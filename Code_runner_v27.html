@@ -230,7 +230,7 @@
   const DYN_W=20, DYN_H=26, DYN_VX=560, DYN_VY0=-540, DYN_GRAV=2000, DYN_HIT_R=32, BOOM_T=0.28;
   const DYN_DRAW=1.4;                 // niva 5: dynamitens RITSTORLEK +40% (bade kastad sprite och pickup). Kastbana/DYN_VX/DYN_VY0/DYN_GRAV samt hitbox (DYN_HIT_R) ar oberoende och OROR.
   const DYN_PICK_AMMO=2;              // en dynamit-pickup ger 2 kast
-  const CRATE_W=34, CRATE_H=40;
+  const CRATE_W=50, CRATE_H=60;
   const btcImg=new Image();  btcImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAYAAACtrX6oAAAAuElEQVR4nO3cUQ3CQBBAwS3BIAqwgpUqQAuKighSmrybUbDJy/3sJbsd7+cxC9ke+3b1DP90u3oAziVwnMBxAscJHCdwnMBxAscJHCdwnMBx9/nsV8/AibzgOIHjBI4TOE7gOIHjBI4TOE7gOIHjBAYAAAAAAH6y1L2KmZnVbpL4TYoTOE7gOIHjBI4TOE7gOIHjBI4TOE7guPV20a+xi6ZD4DiB4wSOEzhO4DiB4wSOEzhO4DiB477KyAtcOLpWZgAAAABJRU5ErkJggg==';
   const btcgImg=new Image(); btcgImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABmCAYAAAAAuFU5AAAA70lEQVR4nO3dwQ2CQBBAUdbYoBVYGxVYixVpCW4MCP68d+Ywyc9eNgyM5U+9HvfXp2fGbR2/mOXMLkcPwL4EjhM4TuA4geMEjhM4TmAAAAAAAAAAAIDtjJkdnzOydzTHS3dxAscJHCdwnMBxAscJHCdw3HV5rkfPwI6c4DiB4wSOEzhO4DiB4wSOExgAAAAAOIG/3e+xUzXHXXScwHECxwkcJ3CcwHECxwkcdz16gK/ZqZq67HGC4wSOEzhO4DiB4wSOEzhOYAAAAAAAAAAAgO38/CMsM/s0fv68HS/dxQkcJ3CcwHECxwkcJ3CcwHFvIdIWXVs6RQgAAAAASUVORK5CYII=';
   const runeImg=new Image();  runeImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANAAAAEACAYAAADC7fjvAAAC1klEQVR42u3dsWnDUBSGUSmoducFsoEgWwiv4BEyS/AALrRC0BYGbeA2hTrVAWeHXHjics/pZUeyP56bn/QdIT9f3evI9388j73/y63rK3/+bxIAAYGAQEAgIEBAICAQEAgIEBAICAQEAgIBAQKCttJvOY7e41QX3SNl3xM5gUBAICAQEAgIEBAICAQEAgIEBAICAYGAQECAgKCxw7cY9jy1Zd8TOYFAQCAgEBAICBAQCAgEBAICBAQCAgGBgEBAgICgsSH6Atn3PNM8hq5frmvqL8D5FLt+251AgIBAQCAgEBAgIBAQCAgEBAgIBAQCAgGBgAABQUND9T1P9vePyr5ncgKBgEBAgIBAQCAgEBAgIBAQCAgEBAgIBAQCAgFBMUP1B1B9D3P0/0f6eI/9/d+fsT3b5db1TiDwEw4EBAICBAQCAgGBgAABgYBAQCAgEBAgIBAQJBLeA51Pseu33YfA/x29J3ICgYBAQCAgEBAgIBAQCAgEBAgIBAQCAgGBgAABQWPhPZA9D04gQEAgIBAQCAgQEAgIBAQCAgQEAgIBgYBAQICAoJmh+gOY5tG3ACcQCAgEBAICBAQCAgGBgAABgYBAQCAgEBAgIBAQZFF+D7Rc19L3bw/lBAIBgYBAQICAQEAgIBAQICAQEAgIBAQCAgQEAgIBgYAAAYGAQEAgIEBAICAQEAgIBAQICAQEAgIBAQICAYGAQECAgEBAICAQEAgIEBAICAQEAgIEBAICAYGAQECAgEBAICAQECAgEBAICAQECAgEBAICAYGAAAGBgCCJofoDmOax9P0v11UFTiAQEAgIBAQICAQEAgIBAQICAYGAQEAgIEBAICDII/0eKLpnie6B7GmcQICAQEAgIBAQICAQEAgIBAQICAQEAgIBgYAAAUFD/e+9e0VeYNs9RPJ6PJ1A4CccCAgEBAgIBAQCAgEBAgIBgYBAQCAgQEAgIEjlD915P8Sd1K7gAAAAAElFTkSuQmCC';
@@ -705,8 +705,9 @@
       obstacles.push({type:'rope',x:spawnX,w:ROPE_W,cut:false,fallY:0,fallV:0,cutY:0});
       spawnX+=ROPE_W+gap+50;
     } else if(type==='ground'){
-      if(level===5 && Math.random()<0.35){                // niva 5: krossbar TNT-lada - samma "ground"-kollision (alltid hoppbar/valfri), sprangbar med dynamit men GER INGEN beloning
-        obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:CRATE_W,h:CRATE_H,crate:true,hp:1});
+      if(level===5 && Math.random()<0.35){                // niva 5: lada - samma "ground"-kollision (alltid hoppbar/valfri). Endast variant 1 (sprangbar) reagerar pa dynamit; variant 2/3 ar ren dekor/hinder.
+        const cv=1+Math.floor(Math.random()*3);            // 1=sprangbar (varningstriangel), 2=brun tralada, 3=orange tralada - jamn slump
+        obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:CRATE_W,h:CRATE_H,crate:true,variant:cv,hp:1});
         spawnX+=CRATE_W+gap;
       } else {
         const h=28+t*24+Math.random()*(6+t*14);
@@ -929,7 +930,7 @@
         const bx=W+60;
         if(dpClear(bx) && !obstacles.some(o=>Math.abs(o.x-(bx+250))<150)){
           dynPickups.push({x:bx,y:dpY,bob:0,got:false});
-          obstacles.push({type:'ground',x:bx+250,y:GROUND_Y,w:CRATE_W,h:CRATE_H,crate:true,hp:1});   // laro-lada (valfri att spranga)
+          obstacles.push({type:'ground',x:bx+250,y:GROUND_Y,w:CRATE_W,h:CRATE_H,crate:true,variant:1,hp:1});   // laro-ladan SKA vara variant 1 (sprangbar, varningstriangel)
           dynTeachSpawned=true;
         } else if(lvlDist>1700){ dynTeachSpawned=true; }        // sakerhetsventil: sluta forsoka om aldrig fritt (pre-berg-paret + scatter garanterar anda ammo)
       }
@@ -1148,7 +1149,7 @@
             if(o.endBerg){ if(d.x>o.x-DYN_HIT_R && d.x<o.x+MTN_W+DYN_HIT_R){ hitObs=o; break; } }   // niva 5:s berg: traff var som helst over hela den breda basen racker (palitlig sprangning - bot-mitigering sa boten sakert landar 3 traffar mot den ooverhoppbara vaggen)
             else { const sc=o.hp/3, cx=o.x+MTN_W*sc*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }   // horisontell traff racker (bergets siluett ar hog och bred, ingen hojd-precision kravs)
           }
-          else if(o.crate && o.hp>0){ const cx=o.x+CRATE_W*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }
+          else if(o.crate && o.variant===1 && o.hp>0){ const cx=o.x+CRATE_W*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }   // endast variant 1 (sprangbar) reagerar pa dynamit
         }
         if(hitObs || d.y>=GROUND_Y-6){
           d.state='boom'; d.boomT=0; d.y=Math.min(d.y,GROUND_Y-6);
@@ -1509,17 +1510,23 @@
     else { const bh=ducked?H_DUCK:H_STAND; ctx.fillStyle='#888'; ctx.fillRect(player.x,player.y-bh,P_W,bh); }
   }
 
-  // niva 5: krossbart industrihinder (TNT-lada), ritad i kod - traig, roda varningskryss, rostiga hornbultar
-  function drawCrate(x,y,w,h){
-    ctx.fillStyle='#5a3c22'; ctx.fillRect(x,y,w,h);
-    ctx.fillStyle='#3e2716'; ctx.fillRect(x,y,w,4);
-    ctx.fillStyle='#7a5334'; ctx.fillRect(x+3,y+4,w-6,h-8);
-    ctx.fillStyle='#c81a1a';
-    ctx.fillRect(x+w*0.42,y+h*0.18,w*0.16,h*0.64);
-    ctx.fillRect(x+w*0.18,y+h*0.42,w*0.64,h*0.16);
-    ctx.fillStyle='#241a10';
-    ctx.fillRect(x+2,y+2,3,3); ctx.fillRect(x+w-5,y+2,3,3);
-    ctx.fillRect(x+2,y+h-5,3,3); ctx.fillRect(x+w-5,y+h-5,3,3);
+  // niva 5: lador (LADBYTE) - tvadelade platta farg falt, morkare vansterkant (~28% av bredden) som skuggsida, inga bultar/dekor.
+  // variant 1: sprangbar, morkt graybrun kropp + centrerad orange varningstriangel. variant 2: brun tralada. variant 3: orange tralada. Endast variant 1 reagerar pa dynamit.
+  function drawCrate(x,y,w,h,variant){
+    const edgeW=w*0.28;
+    const body = variant===1 ? '#4a443c' : variant===2 ? '#8a5a28' : '#c26b1e';
+    const edge = variant===1 ? '#332e28' : variant===2 ? '#5f3d1a' : '#8a4a15';
+    ctx.fillStyle=body; ctx.fillRect(x,y,w,h);
+    ctx.fillStyle=edge; ctx.fillRect(x,y,edgeW,h);
+    if(variant===1){
+      const th=h*0.42, tw=th*1.15, cx=x+w*0.5, cy=y+h*0.5;   // varningstriangel: spets uppat, centrerad, ~42% av lådhöjden
+      ctx.fillStyle='#f08a24';
+      ctx.beginPath();
+      ctx.moveTo(cx, cy-th*0.5);
+      ctx.lineTo(cx+tw*0.5, cy+th*0.5);
+      ctx.lineTo(cx-tw*0.5, cy+th*0.5);
+      ctx.closePath(); ctx.fill();
+    }
   }
   function drawMempoolBlock(x,y,w,h,col){
     ctx.fillStyle='#15110d'; ctx.fillRect(x,y,w,h);
@@ -1535,7 +1542,7 @@
       if(o.type==='ground'){
         const x=o.x,y=o.y-o.h,w=o.w,h=o.h;
         if(o.mp){ drawMempoolBlock(x,y,w,h,o.col); continue; }
-        if(o.crate){ drawCrate(x,y,w,h); continue; }
+        if(o.crate){ drawCrate(x,y,w,h,o.variant); continue; }
         ctx.fillStyle='#1a1714';ctx.fillRect(x,y,w,h);
         ctx.fillStyle=ORANGE;ctx.fillRect(x,y,w,5);
         ctx.fillStyle='#2a2420';ctx.fillRect(x,y+5,w*0.3,h-5);
@@ -2019,7 +2026,7 @@
           else if(charges<=0 && d<ngd){ ngd=d; ngObs=o; } }             // no charge -> treat wall as jump threat (bail)
         continue; }
       if(o.type==='air'){ if(d<nad){ nad=d; naObs=o; } continue; }
-      if(level===5 && o.crate && o.hp>0 && d>-40 && d<380) shoot=true;   // niva 5: prova sprang krossbara hinder med dynamit (aldrig obligatoriskt, forfaller till vanligt hopp nedan)
+      if(level===5 && o.crate && o.variant===1 && o.hp>0 && d>-40 && d<380) shoot=true;   // niva 5: prova sprang endast variant 1 (sprangbar) med dynamit (aldrig obligatoriskt, forfaller till vanligt hopp nedan)
       if(d<ngd){ ngd=d; ngObs=o; }                     // ground / fall solid
     }
     // fallers already on/near the ground path behave like solid blocks
