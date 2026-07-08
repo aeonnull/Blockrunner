@@ -604,6 +604,11 @@
     }
     // ---------- SPAWN-SKYDD MOT PLATTFORMAR (t.ex. sat-blocket): galler ALLA hindertyper ----------
     for(const p of plats){ if(spawnX>p.x-400 && spawnX<p.x+p.w+400){ spawnX=p.x+p.w+400; } }
+    // ---------- BAKAT-SKYDD (niva 3): flytta HELA obstakel-spawnen (enstaka + kombon) forbi ett aktivt fallande blocks x-bana ----------
+    // Ett block som redan schemalagts foljer banan fb.x (warn->fall->landad). Ett hinder som spawnar EFTER blocket co-travellar med konstant offset,
+    // sa det racker att halla spawnX minst safeGap till hoger om varje aktivt blocks NUVARANDE x -> hindret hamnar aldrig i/intill landningszonen.
+    if(level===3){ const fsg=Math.max(180,speed*0.85);
+      for(const fb of fallers){ if(!fb.dead && spawnX>fb.x-fsg && spawnX<fb.x+fsg){ spawnX=fb.x+fsg; } } }
     // ---------- INTRODUKTIONSBLOCK (endast niva 2): ETT garanterat hogt block (h:58), ensamt mitt i banan ----------
     if(level===2 && !introBlockSpawned && lvlDist>3000){
       if(lvlDist>=5000){ introBlockSpawned=true; }
@@ -810,7 +815,7 @@
         const warnT=(level===3?1.0:0.65), fallFlightT=(level===3?1.70:1.35);   // niva 3: langre varning 1.0s; landX-estimat matchar (1.0 varning + 0.70 falltid)
         const landX=fx-speed*fallFlightT, safeGap=Math.max(180,speed*0.85);
         const clear = (level===3
-            ? !obstacles.some(o=>Math.abs(o.x-landX)<safeGap)                                 // niva 3: langre flygtid gor fx..landX-korridoren (~788px) bredare an hinderavstandet -> skydda BARA landningszonen (falltidens svep ryms i landX±safeGap), annars uteblir blocken
+            ? !obstacles.some(o=>Math.abs(o.x-fx)<safeGap)                                     // niva 3: skydda blockets HELA x-bana. Allt scrollar med samma speed, sa ett hinder vid fx co-travellar exakt till landningspunkten (landX=fx-speed*flygtid) och foljer med genom fall+landning. Att kolla fx (inte landX-nu) ar just skyddet av landningszonen vid landningsogonblicket
             : !obstacles.some(o=>Math.abs(o.x-fx)<safeGap || Math.abs(o.x-landX)<safeGap))
           && !gaps.some(g=>(fx>g.x-60&&fx<g.x+g.w+60) || (landX>g.x-80&&landX<g.x+g.w+80))
           && !plats.some(p=>(p.roof||level===3)&&((fx>p.x-70&&fx<p.x+p.w+70) || (landX>p.x-90&&landX<p.x+p.w+90)));   // niva 3: undvik aven sat-plattformen (icke-roof)
