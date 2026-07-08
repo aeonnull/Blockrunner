@@ -1132,7 +1132,7 @@
 
   // ---------- draw ----------
   function drawBackground(){
-    ctx.fillStyle=(level===3?'#855d3d':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: morkare aprikos himmel (~45% morkare an f2a96e; byte exakt vid nivaovergang 2->3 och 3->4)
+    ctx.fillStyle=(level===3?'#64462e':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: morkare aprikos himmel (855d3d *0.75; byte exakt vid nivaovergang 2->3 och 3->4)
     if(blueBlend>0.01){ ctx.globalAlpha=0.30*blueBlend; ctx.fillStyle='#1a3a7a'; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1; }
     if(zoneBlend>0.01){
       ctx.globalAlpha=zoneBlend; ctx.fillStyle='#5b1b20'; ctx.fillRect(0,0,W,H);
@@ -1143,8 +1143,8 @@
       ctx.globalAlpha=1;
     }
     if(level===3){                                        // niva 3: Gamla Stockholm-siluett (tinnar och torn) ersatter skyskrapssiluetten
-      drawOldTown(bgScroll*0.25,190,'#563a27','#7b5a21',84);   // ~45% morkare an tidigare (behaller aprikos/varm ton)
-      drawOldTown(bgScroll*0.5,140,'#3d271a','#6f5934',60);
+      drawOldTown(bgScroll*0.25,190,'#412c1d','#5c4419',84);   // ytterligare *0.75 (behaller aprikos/varm ton)
+      drawOldTown(bgScroll*0.5,140,'#2e1d14','#534327',60);
     } else {
       drawSkyline(bgScroll*0.25,200,'#0c1620',80,9000);
       drawSkyline(bgScroll*0.5,150,'#0a1118',58,4500);
