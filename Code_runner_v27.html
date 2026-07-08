@@ -199,7 +199,7 @@
   const H_STAND=140, H_DUCK=59, P_W=70;            // real sprite (aspect 0.5)
   const SPD_START=189, SPD_RAMP=2.8, SPD_MAX=610;
   const DRONE_ENABLED=true;                        // atteraktiverad ETAPP 4: dronaren begransas till niva 4 via egen level===4-sparr (se spawn-anropet)
-  const LVL_LEN=[0,4500,7500,9000,9000,16000,20000,16000,18000,999999,23000,999999];
+  const LVL_LEN=[0,4500,7500,9000,9000,9000,20000,16000,18000,999999,23000,999999];
   const LVL_SPD=[0,205,221,232,248,243,265,254,275,281,297,313];
   const LVL_HINT=['','JUMP \u25b2 HOLD=HIGHER  DUCK \u25bc  SHOOT \u2726=ROPES','SHOOT \u2726=ROPES \u00b7 GOLD RUNE = 5 \u20bf, GRAB FAST','NEW: FALLING BLOCKS \u2014 watch the mark','COMBINE.','NEW: SHOOT \u2726 \u2014 cut the ropes','EVERYTHING. FASTER.','DISTRICT: ROOFTOPS','ROOFTOPS + FALLING SKY','BIP 110 AWAITS','ALL OF IT.','THE CITY IS YOURS'];
   const BAR_BOTTOM_OFF=108;
@@ -225,6 +225,9 @@
   const starImg=new Image(); starImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADUAAAAoCAYAAABerrI1AAAAnElEQVR42u2ZywnAIBBE15COcrIH21hSqtXYQ65hyUHMeIh5c1sQ4bGf8ZNsQKWU08bk96DWetzj1loygTZbUEB9RUm10UOfeVwTe6hHI31G+QEFlFa70HydTAEFVJ/5zjJWlaJBU35AASUeFJ23WJ8xFHLOcdiQKaAwX8yX8gOKQfHiNswTGeX3RyjlaxKZAgooTukS8ecL1OpQFyTlNIGr9AxgAAAAAElFTkSuQmCC';
   const bossImg=new Image(); bossImg.src='data:image/png;base64,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';
   const MTN_W=140, MTN_H=210, SWING_T=0.30, SWING_HIT=0.12;
+  // niva 5: dynamit (kastad, ersatter narstridssvepet dar) + krossbara industrihinder
+  const DYN_W=20, DYN_H=26, DYN_VX=560, DYN_VY0=-540, DYN_GRAV=2000, DYN_HIT_R=32, BOOM_T=0.28;
+  const CRATE_W=34, CRATE_H=40;
   const btcImg=new Image();  btcImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAYAAACtrX6oAAAAuElEQVR4nO3cUQ3CQBBAwS3BIAqwgpUqQAuKighSmrybUbDJy/3sJbsd7+cxC9ke+3b1DP90u3oAziVwnMBxAscJHCdwnMBxAscJHCdwnMBx9/nsV8/AibzgOIHjBI4TOE7gOIHjBI4TOE7gOIHjBAYAAAAAAH6y1L2KmZnVbpL4TYoTOE7gOIHjBI4TOE7gOIHjBI4TOE7guPV20a+xi6ZD4DiB4wSOEzhO4DiB4wSOEzhO4DiB477KyAtcOLpWZgAAAABJRU5ErkJggg==';
   const btcgImg=new Image(); btcgImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAABmCAYAAAAAuFU5AAAA70lEQVR4nO3dwQ2CQBBAUdbYoBVYGxVYixVpCW4MCP68d+Ywyc9eNgyM5U+9HvfXp2fGbR2/mOXMLkcPwL4EjhM4TuA4geMEjhM4TmAAAAAAAAAAAIDtjJkdnzOydzTHS3dxAscJHCdwnMBxAscJHCdw3HV5rkfPwI6c4DiB4wSOEzhO4DiB4wSOExgAAAAAOIG/3e+xUzXHXXScwHECxwkcJ3CcwHECxwkcdz16gK/ZqZq67HGC4wSOEzhO4DiB4wSOEzhOYAAAAAAAAAAAgO38/CMsM/s0fv68HS/dxQkcJ3CcwHECxwkcJ3CcwHFvIdIWXVs6RQgAAAAASUVORK5CYII=';
   const runeImg=new Image();  runeImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANAAAAEACAYAAADC7fjvAAAC1klEQVR42u3dsWnDUBSGUSmoducFsoEgWwiv4BEyS/AALrRC0BYGbeA2hTrVAWeHXHjics/pZUeyP56bn/QdIT9f3evI9388j73/y63rK3/+bxIAAYGAQEAgIEBAICAQEAgIEBAICAQEAgIBAQKCttJvOY7e41QX3SNl3xM5gUBAICAQEAgIEBAICAQEAgIEBAICAYGAQECAgKCxw7cY9jy1Zd8TOYFAQCAgEBAICBAQCAgEBAICBAQCAgGBgEBAgICgsSH6Atn3PNM8hq5frmvqL8D5FLt+251AgIBAQCAgEBAgIBAQCAgEBAgIBAQCAgGBgAABQUND9T1P9vePyr5ncgKBgEBAgIBAQCAgEBAgIBAQCAgEBAgIBAQCAgFBMUP1B1B9D3P0/0f6eI/9/d+fsT3b5db1TiDwEw4EBAICBAQCAgGBgAABgYBAQCAgEBAgIBAQJBLeA51Pseu33YfA/x29J3ICgYBAQCAgEBAgIBAQCAgEBAgIBAQCAgGBgAABQWPhPZA9D04gQEAgIBAQCAgQEAgIBAQCAgQEAgIBgYBAQICAoJmh+gOY5tG3ACcQCAgEBAICBAQCAgGBgAABgYBAQCAgEBAgIBAQZFF+D7Rc19L3bw/lBAIBgYBAQICAQEAgIBAQICAQEAgIBAQCAgQEAgIBgYAAAYGAQEAgIEBAICAQEAgIBAQICAQEAgIBAQICAYGAQECAgEBAICAQEAgIEBAICAQEAgIEBAICAYGAQECAgEBAICAQECAgEBAICAQECAgEBAICAYGAAAGBgCCJofoDmOax9P0v11UFTiAQEAgIBAQICAQEAgIBAQICAYGAQEAgIEBAICDII/0eKLpnie6B7GmcQICAQEAgIBAQICAQEAgIBAQICAQEAgIBgYAAAUFD/e+9e0VeYNs9RPJ6PJ1A4CccCAgEBAgIBAQCAgEBAgIBgYBAQCAgQEAgIEjlD915P8Sd1K7gAAAAAElFTkSuQmCC';
@@ -232,7 +235,7 @@
   const RUNE_AR=0.8125, RUNE_W=29, RUNE_OFF=16, RUNE_BTC=5, RUNE_LIFE=3.4;  // guld-runa pa bergstoppen
   // rare sat (niva 2): silverfargad myntvariant pa ett plattformsblock
   const SAT_BTC=21, SAT_CHANCE=0.60, SAT_WIN_FROM=3750, SAT_WIN_TO=6500;
-  const SAT_GUARANTEED_LEVELS=[2,3,4];   // 100% chans pa dessa nivaer istallet for SAT_CHANCE
+  const SAT_GUARANTEED_LEVELS=[2,3,4,5];   // 100% chans pa dessa nivaer istallet for SAT_CHANCE
   const SAT_BLOCK_H=120, SAT_BLOCK_W=110;
   // sat-hojd: fast varde 320 (total 120+320=440 px over marken; onabar fran marken >414, nabar med hopp fran blocket <534, marginal 94)
   const SAT_ABOVE_BLOCK = 320;
@@ -253,7 +256,7 @@
   let lbFallback=[{n:'MIO',s:1450},{n:'SATOSHI',s:1120},{n:'ORDINAL',s:880},{n:'BLOCK',s:610},{n:'DEGEN',s:420}];
   function esc(t){return String(t).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
   let player,obstacles,particles,spawnX,bgScroll,shakeT,flashT,coinsArr,coinTimer,lastAction,lastWasRope;
-  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0,rareSatRolled=false,rareSatWillSpawn=false,rareSatSpawned=false,rareSatCollectedThisLevel=false,introBlockSpawned=false,lvlRuneSpawned=false,lvlRuneTriggerAt=0,l3ArcHigh=false;
+  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0,rareSatRolled=false,rareSatWillSpawn=false,rareSatSpawned=false,rareSatCollectedThisLevel=false,introBlockSpawned=false,lvlRuneSpawned=false,lvlRuneTriggerAt=0,l3ArcHigh=false,dynamites=[],mtnSpawned=false,mtnTriggerAt=0,rockHintT=0,l5ArcFlat=false;
   let igrace=0,exhaustedT=0;
   let bonus=0,blockHeight,blockFill,chain,surge,txArr,txTimer,confirmMsgT,txPops;
 
@@ -269,7 +272,8 @@
     speed=LVL_SPD[Math.min(level,11)]; heartLvlDone=false; waterDone=false;
     rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     introBlockSpawned=false; lvlRuneSpawned=false; l3ArcHigh=false; lvlRuneTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.45);
-    plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400;
+    mtnSpawned=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.40); rockHintT=0; l5ArcFlat=false;
+    plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400; dynamites=[];
     if(zone==='roof')roofRuns++; fireT=0; fireCd=0; hammer=null; hammerTimer=14; zapT=0; charges=0; swingT=0; swingTarget=null; swingHit=false;
     coinsArr=[]; coinTimer=2.0; coins=0; runesGot=0; satsGot=0;
     bonus=0; blockHeight=BLOCK_START; blockFill=0.40; chain=[]; surge=null; txArr=[]; txTimer=2.2; confirmMsgT=0; txPops=[];
@@ -410,14 +414,18 @@
       if(m){ swingT=SWING_T; swingTarget=m; swingHit=false; return; }
     }
     if(fireCd>0||!player.onGround) return;
-    fireT=0.34; fireCd=0.55;
+    fireCd=0.55;
     const reach=((H_STAND/FIRE_CHAR_HF)*FIRE_IMG_AR*FIRE_REACHF+40)*_rm;
     const beamY=player.y-H_STAND*0.60;
     let best=null,bd=1e9;
     for(const o of obstacles){ if(o.type==='rope'&&!o.cut){ const d=o.x-(player.x+P_W); if(d>=-12&&d<=reach&&d<bd){bd=d;best=o;} } }
-    if(best){ best.cut=true; best.cutY=beamY; best.fallV=0; best.fallY=0;
+    if(best){ fireT=0.34; best.cut=true; best.cutY=beamY; best.fallV=0; best.fallY=0;
       for(let i=0;i<18;i++)particles.push({x:best.x+ROPE_W/2,y:beamY,vx:(Math.random()-0.2)*280,vy:(Math.random()-0.5)*280,life:0.3+Math.random()*0.25,c:Math.random()<0.6?'#19E6A0':'#BFF6E2',s:4+Math.random()*4});
+    } else if(level===5){
+      // niva 5: inget rep i omedelbar vag -> kasta dynamit istallet (fritt, ingen ammo). Egen kastbana, ingen paverkan pa fireT (ingen pistolvisual).
+      dynamites.push({x:player.x+P_W*0.55,y:player.y-H_STAND*0.62,vx:DYN_VX,vy:DYN_VY0,state:'fly',t:0});
     } else {
+      fireT=0.34;
       for(let i=0;i<6;i++)particles.push({x:player.x+95,y:beamY,vx:Math.random()*220+70,vy:(Math.random()-0.5)*120,life:0.2+Math.random()*0.15,c:'#19E6A0',s:3+Math.random()*3});
     }
   }
@@ -490,7 +498,7 @@
 
   function enterCleared(){
     state='cleared'; clearedT=0; bonus+=150*bmult();
-    obstacles=[]; gaps=[]; drone=null; boss=null; roofBoss=null; surge=null; stars=[]; ropeBalls=[]; lanterns=[]; plats=[]; hearts=[]; fallers=[];
+    obstacles=[]; gaps=[]; drone=null; boss=null; roofBoss=null; surge=null; stars=[]; ropeBalls=[]; lanterns=[]; plats=[]; hearts=[]; fallers=[]; dynamites=[];
     player.y=GROUND_Y; player.vy=0; player.onGround=true; ducking=false;
   }
   function confirmNext(){
@@ -505,6 +513,8 @@
     heartLvlDone=false; waterDone=false;
     rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     introBlockSpawned=false; lvlRuneSpawned=false; l3ArcHigh=false; lvlRuneTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.45);
+    mtnSpawned=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.40); rockHintT=0; l5ArcFlat=false; dynamites=[];
+    if(level===5) charges=0;   // niva 5: dynamit ersatter hammar-svepet, ingen kvarhangande charge ska kunna trigga det gamla svepet
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL is re-shielded on each new level
     if(typeof refreshLvlSel==='function') refreshLvlSel();
@@ -521,7 +531,8 @@
     speed=LVL_SPD[Math.min(level,11)]; heartLvlDone=false; waterDone=false;
     rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     introBlockSpawned=false; lvlRuneSpawned=false; l3ArcHigh=false; lvlRuneTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.45);
-    plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400;
+    mtnSpawned=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.40); rockHintT=0; l5ArcFlat=false;
+    plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400; dynamites=[];
     if(zone==='roof')roofRuns++; fireT=0; fireCd=0; hammer=null; hammerTimer=14; zapT=0; charges=0; swingT=0; swingTarget=null; swingHit=false;
     coinsArr=[]; coinTimer=2.0;
     surge=null;
@@ -609,6 +620,9 @@
     // sa det racker att halla spawnX minst safeGap till hoger om varje aktivt blocks NUVARANDE x -> hindret hamnar aldrig i/intill landningszonen.
     if(level===3){ const fsg=Math.max(180,speed*0.85);
       for(const fb of fallers){ if(!fb.dead && spawnX>fb.x-fsg && spawnX<fb.x+fsg){ spawnX=fb.x+fsg; } } }
+    // ---------- SPAWN-SKYDD MOT BERGET (niva 5): hall ovriga hinder/kombon borta fran bergets zon, sa dynamit-sprangningen alltid sker over fri mark ----------
+    if(level===5){ const msg=Math.max(220,speed*0.9);
+      for(const o of obstacles){ if(o.type==='mtn' && spawnX>o.x-msg && spawnX<o.x+MTN_W+msg){ spawnX=o.x+MTN_W+msg; } } }
     // ---------- INTRODUKTIONSBLOCK (endast niva 2): ETT garanterat hogt block (h:58), ensamt mitt i banan ----------
     if(level===2 && !introBlockSpawned && lvlDist>3000){
       if(lvlDist>=5000){ introBlockSpawned=true; }
@@ -626,8 +640,8 @@
         } else { spawnX-=iMaxGap; }                                   // annars: forsok igen nasta anrop
       }
     }
-    // ---------- KOMBOBIBLIOTEK (niva 2, 3 och 4): tre handdesignade monster; niva 3 glesare (0.22), niva 4 annu glesare (0.16) -> dronaren far ta rytmutrymmet ----------
-    if((level===2||level===3||level===4) && Math.random()<(level===3?0.22:level===4?0.16:0.33)){
+    // ---------- KOMBOBIBLIOTEK (niva 2-5): tre handdesignade monster; niva 3 glesare (0.22), niva 4 annu glesare (0.16), niva 5 egen (0.19) ----------
+    if((level===2||level===3||level===4||level===5) && Math.random()<(level===3?0.22:level===4?0.16:level===5?0.19:0.33)){
       const ct=Math.min(1,(speed-SPD_START)/300);
       const tMinGap=Math.max(380-ct*40, speed*0.82+80), tMaxGap=tMinGap+150+ct*60;
       const tailGap=tMinGap+Math.random()*(tMaxGap-tMinGap);
@@ -665,7 +679,7 @@
     let type, action='jump';
     if((level===5?lvlDist>1500:(level===6||level>=10)) && charges>0 && r<0.15){ type='mtn'; }
     else if(!lastWasRope && ((level===2 && r<0.40) || ((level===5?lvlDist>1500:(level===6||level>=10)) && r<0.30))){ type='rope'; }
-    else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):(level===3?0.46:level===4?0.34:0.38));   // niva 3: hogre duck-andel (0.46); niva 4: lagre (0.34) -> hopp-tung marklinje, dronaren star for duck-signumet
+    else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):(level===3?0.46:level===4?0.34:level===5?0.40:0.38));   // niva 3: hogre duck-andel (0.46); niva 4: lagre (0.34); niva 5: mellanlage (0.40) -> egen balans mot dynamit/krossbara hinder
       if(r<1-airP){ type='ground'; } else { type='air'; action='duck'; } }
     // luckor: mer luft tidigt, extra nar man maste byta stallning (ducka<->hoppa)
     const minGap=Math.max(380-t*40, speed*0.82+80);   // landningsrum skalar med farten -> aldrig kortare an ett hopp
@@ -681,29 +695,35 @@
       obstacles.push({type:'rope',x:spawnX,w:ROPE_W,cut:false,fallY:0,fallV:0,cutY:0});
       spawnX+=ROPE_W+gap+50;
     } else if(type==='ground'){
-      const h=28+t*24+Math.random()*(6+t*14);
-      let bw=28+t*18+Math.random()*(6+t*16);
-      const clearW=Math.max(34, speed*0.60 - P_W - 14);   // aldrig bredare an ett lagfarts-hopp klarar
-      if(bw>clearW) bw=clearW;
-      obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:bw,h});
-      spawnX+=bw+gap;
+      if(level===5 && Math.random()<0.35){                // niva 5: krossbart industrihinder - samma "ground"-kollision (alltid hoppbart), dynamit ger extra poang
+        obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:CRATE_W,h:CRATE_H,crate:true,hp:1});
+        spawnX+=CRATE_W+gap;
+      } else {
+        const h=28+t*24+Math.random()*(6+t*14);
+        let bw=28+t*18+Math.random()*(6+t*16);
+        const clearW=Math.max(34, speed*0.60 - P_W - 14);   // aldrig bredare an ett lagfarts-hopp klarar
+        if(bw>clearW) bw=clearW;
+        obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:bw,h});
+        spawnX+=bw+gap;
+      }
     } else {
       const bw=44+t*30+Math.random()*(10+t*18);
       obstacles.push({type:'air',x:spawnX,bottom:GROUND_Y-BAR_BOTTOM_OFF,w:bw,h:240});
       spawnX+=bw+gap;
     }
-    // ---------- MYNTBAGAR (niva 2: ~var tredje hinder; niva 3 och 4: glesare ~var femte, varannan bage hog; niva 4: brotema, speglar hangbrons kablar) ----------
-    if((level===2||level===3||level===4) && Math.random()<((level===3||level===4)?0.20:0.33)){
+    // ---------- MYNTBAGAR (niva 2: ~var tredje hinder; niva 3/4/5: glesare ~var femte; niva 3/4 varannan bage hog; niva 5: varannan lag rak rad = transportband) ----------
+    if((level===2||level===3||level===4||level===5) && Math.random()<((level===3||level===4||level===5)?0.20:0.33)){
       const arcFrom=preSpawnX+70, arcTo=spawnX-60;
       if(arcTo>arcFrom+80){
         const n=3+Math.floor(Math.random()*3);
         const step=(arcTo-arcFrom)/Math.max(1,n-1);
-        let highArc=false;
+        let highArc=false, flatRow=false;
         if(level===3||level===4){ l3ArcHigh=!l3ArcHigh; highArc=l3ArcHigh; }   // niva 3/4: varannan bage hog -> kraver hopp
+        if(level===5){ l5ArcFlat=!l5ArcFlat; flatRow=l5ArcFlat; }              // niva 5: varannan lag rak rad (transportbandskansla) istallet for bage
         const base=highArc?190:70;                                  // hog: andmynt Hc=190 (>166 standrackvidd), topp Hc=320 (<414 hopprackvidd, marginal 94); lag: som niva 2 (topp 200)
         for(let i=0;i<n;i++){
           const tt=n>1?i/(n-1):0.5;
-          const ay=GROUND_Y-(base+130*Math.sin(Math.PI*tt));
+          const ay=flatRow ? GROUND_Y-70 : GROUND_Y-(base+130*Math.sin(Math.PI*tt));
           coinsArr.push({x:arcFrom+step*i,y:ay,bob:i*0.4,got:false});
         }
       }
@@ -845,8 +865,8 @@
     // ---------- STREET HEART ----------
     if(level>=2 && zone==='street' && !heartLvlDone && lvlDist>LVL_LEN[Math.min(level,10)]*0.55){
       heartLvlDone=true; hearts.push({x:W+80,y:GROUND_Y-232,bob:0,got:false}); }
-    // ---------- RARE SAT (niva 2, 3 och 4): max 1/niva; niva 2/3/4 garanterad (SAT_GUARANTEED_LEVELS); hoppblock + sat utom rackhall fran marken ----------
-    if((level===2||level===3||level===4) && zone==='street' && !rareSatSpawned){
+    // ---------- RARE SAT (niva 2-5): max 1/niva; niva 2-5 garanterad (SAT_GUARANTEED_LEVELS); hoppblock + sat utom rackhall fran marken ----------
+    if((level===2||level===3||level===4||level===5) && zone==='street' && !rareSatSpawned){
       if(!rareSatRolled && lvlDist>SAT_WIN_FROM){ rareSatRolled=true; rareSatWillSpawn=SAT_GUARANTEED_LEVELS.includes(level)?true:Math.random()<SAT_CHANCE; }
       if(rareSatRolled){
         if(!rareSatWillSpawn || lvlDist>=SAT_WIN_TO){ rareSatSpawned=true; }
@@ -875,6 +895,20 @@
         if(lrClear){
           coinsArr.push({x:lrBx,y:GROUND_Y-150,bob:0,got:false,rune:true,life:RUNE_LIFE});
           lvlRuneSpawned=true;
+        }
+      }
+    }
+    // ---------- GARANTERAT BERG (niva 5): berget spawnas EN gang, sprangs med dynamit, ger nivans garanterade runa (ateranvander bergets befintliga hp/bonus/runa-logik, se svep- och dynamit-koden) ----------
+    if(level===5 && zone==='street' && !mtnSpawned){
+      if(lvlDist>=LVL_LEN[Math.min(level,10)]*0.75){ mtnSpawned=true; }
+      else if(lvlDist>mtnTriggerAt){
+        const mtnBx=W+420, mtnSafeGap=Math.max(220,speed*0.9);   // annan bx-offset an saten (W+260)/runan (W+80) sa de sallan konkurrerar om samma skarmposition
+        const mtnClear = !obstacles.some(o=>Math.abs(o.x-mtnBx)<mtnSafeGap)
+          && !gaps.some(g=>mtnBx>g.x-60 && mtnBx<g.x+g.w+60)
+          && !plats.some(p=>mtnBx>p.x-70 && mtnBx<p.x+p.w+70);
+        if(mtnClear){
+          obstacles.push({type:'mtn',x:mtnBx,w:MTN_W,hp:3,runeGot:false});
+          mtnSpawned=true; rockHintT=2.4;
         }
       }
     }
@@ -923,6 +957,7 @@
       ropeBalls=ropeBalls.filter(r=>r.x>-80); }
     if(zoneBannerT>0)zoneBannerT-=dt;
     if(lvlBannerT>0)lvlBannerT-=dt;
+    if(rockHintT>0)rockHintT-=dt;
     if(player.y>H+60){die('pit');return;}
     updateMempool(dt);
     document.getElementById('scoreVal').textContent=score;
@@ -984,7 +1019,7 @@
         if(px+pad<o.x+o.w&&px+pw-pad>o.x&&py+pad<o.y+o.h&&py+ph>o.y){die();return;}
       }
     }
-    obstacles=obstacles.filter(o=> o.x+o.w>-60 && !(o.type==='mtn'&&o.hp<=0));
+    obstacles=obstacles.filter(o=> o.x+o.w>-60 && !(o.type==='mtn'&&o.hp<=0) && !(o.crate&&o.hp<=0));
     spawnX-=speed*dt;
 
     if(drone){
@@ -1035,7 +1070,7 @@
       } else if(hammer.x<-90){ hammer=null; hammerTimer=11+Math.random()*8; }
     } else {
       hammerTimer-=dt;
-      if(hammerTimer<=0 && speed>320 && !drone && !surge){ hammer={x:W+50,y:GROUND_Y-HAM_Y_OFF,bob:0}; }
+      if(hammerTimer<=0 && speed>320 && level!==5 && !drone && !surge){ hammer={x:W+50,y:GROUND_Y-HAM_Y_OFF,bob:0}; }   // niva 5: hammaren ersatt av fri dynamit, ingen pickup dar
     }
     if(swingT>0){
       swingT-=dt;
@@ -1050,6 +1085,37 @@
             for(let i=0;i<22;i++)particles.push({x:mx,y:GROUND_Y-110,vx:(Math.random()-0.5)*360,vy:-Math.random()*420-80,life:0.4+Math.random()*0.4,c:Math.random()<0.6?'#f7a000':'#ffe08a',s:3+Math.random()*4}); } }
       }
     }
+    // ---------- DYNAMIT (endast niva 5): kastad i bage, exploderar vid nedslag eller traff. Ateranvander bergets hp/bonus/runa-logik ovan, byter bara TRIGGERN. ----------
+    for(const d of dynamites){
+      if(d.state==='fly'){
+        d.x+=d.vx*dt; d.vy+=DYN_GRAV*dt; d.y+=d.vy*dt; d.t+=dt;
+        let hitObs=null;
+        for(const o of obstacles){
+          if(o.type==='mtn' && o.hp>0){ const sc=o.hp/3, cx=o.x+MTN_W*sc*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }   // horisontell traff racker (bergets siluett ar hog och bred, ingen hojd-precision kravs)
+          else if(o.crate && o.hp>0){ const cx=o.x+CRATE_W*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }
+        }
+        if(hitObs || d.y>=GROUND_Y-6){
+          d.state='boom'; d.boomT=0; d.y=Math.min(d.y,GROUND_Y-6);
+          shakeT=Math.max(shakeT,0.22); flashT=Math.max(flashT,0.10);
+          for(let i=0;i<20;i++)particles.push({x:d.x,y:d.y,vx:(Math.random()-0.5)*420,vy:-Math.random()*380,life:0.3+Math.random()*0.3,c:Math.random()<0.5?'#ffb020':'#2a241e',s:3+Math.random()*4});
+          if(hitObs){
+            hitObs.hp--;
+            if(hitObs.type==='mtn'){
+              const sc=Math.max(hitObs.hp,1)/3, mx=hitObs.x+MTN_W*sc*0.5;
+              if(hitObs.hp<=0){ bonus+=20;
+                for(let i=0;i<42;i++)particles.push({x:mx,y:GROUND_Y-30,vx:(Math.random()-0.5)*540,vy:-Math.random()*540,life:0.5+Math.random()*0.5,c:Math.random()<0.6?'#6e6e6e':'#4a4a4a',s:5+Math.random()*6});
+                if(!hitObs.runeGot){ hitObs.runeGot=true; coinsArr.push({x:mx,y:GROUND_Y-150,bob:0,got:false,rune:true,life:RUNE_LIFE});
+                  for(let i=0;i<22;i++)particles.push({x:mx,y:GROUND_Y-110,vx:(Math.random()-0.5)*360,vy:-Math.random()*420-80,life:0.4+Math.random()*0.4,c:Math.random()<0.6?'#f7a000':'#ffe08a',s:3+Math.random()*4}); }
+              }
+            } else if(hitObs.crate){
+              bonus+=10;
+              for(let i=0;i<24;i++)particles.push({x:hitObs.x+CRATE_W*0.5,y:GROUND_Y-CRATE_H*0.5,vx:(Math.random()-0.5)*380,vy:-Math.random()*360,life:0.35+Math.random()*0.35,c:Math.random()<0.5?'#8a5a30':'#c9c9c9',s:3+Math.random()*4});
+            }
+          }
+        }
+      } else { d.boomT+=dt; }
+    }
+    dynamites=dynamites.filter(d=> d.state==='fly' || d.boomT<BOOM_T);
     coinTimer-=dt;
     if(coinTimer<=0){ coinsArr.push({x:W+40,y:GROUND_Y-(80+Math.random()*210),bob:Math.random()*6,got:false});
       coinTimer=(level===1?3.0:1.5)+Math.random()*2.3; }
@@ -1136,7 +1202,7 @@
 
   // ---------- draw ----------
   function drawBackground(){
-    ctx.fillStyle=(level===3?'#64462e':level===4?'#2a2049':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: morkare aprikos himmel; niva 4: lila skymning (byte exakt vid nivaovergang 3->4 och 4->5)
+    ctx.fillStyle=(level===3?'#64462e':level===4?'#2a2049':level===5?'#5a2818':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: morkare aprikos himmel; niva 4: lila skymning; niva 5: djup terrakotta (byte exakt vid nivaovergang 3->4, 4->5, 5->6)
     if(blueBlend>0.01){ ctx.globalAlpha=0.30*blueBlend; ctx.fillStyle='#1a3a7a'; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1; }
     if(zoneBlend>0.01){
       ctx.globalAlpha=zoneBlend; ctx.fillStyle='#5b1b20'; ctx.fillRect(0,0,W,H);
@@ -1152,6 +1218,9 @@
     } else if(level===4){                                 // niva 4: brodistrikt (hangbro-pyloner + kablar) i lila skymning
       drawBridgeDistrict(bgScroll*0.25,190,'#221934','#4a3a66',96);
       drawBridgeDistrict(bgScroll*0.5,140,'#170f24','#382c50',72);
+    } else if(level===5){                                 // niva 5: djup terrakotta industri (skorstenar, traverser, rorledningar, fabrikssiluetter)
+      drawIndustrial(bgScroll*0.25,190,'#38160c','#6b3a22',90);
+      drawIndustrial(bgScroll*0.5,140,'#260e08','#4a2818',66);
     } else {
       drawSkyline(bgScroll*0.25,200,'#0c1620',80,9000);
       drawSkyline(bgScroll*0.5,150,'#0a1118',58,4500);
@@ -1287,6 +1356,44 @@
       }
     }
   }
+  // Industrisiluett (endast niva 5): fabriksbyggnader med sagtandat tak, skorstenar med rok, gantry-traverser
+  // och en lopande rorledning, ritad i kod. Fast monster (som BRIDGE_H_PATTERN) sa siluetten tilar somlost.
+  const IND_H_PATTERN=[0.36,0.6,0.3,0.5,0.66,0.28,0.46,0.58];
+  const IND_TYPE=[0,1,0,2,1,0,2,0];   // 0=fabriksbyggnad, 1=skorsten, 2=gantry-travers
+  function drawIndustrial(scroll,maxH,color,capCol,step){
+    const off=scroll%step;
+    const pipeY=GROUND_Y-maxH*0.30;
+    ctx.fillStyle=color; ctx.fillRect(0,pipeY,W,6);            // rorledning, lopper genom hela bandet
+    const jOff=scroll%40;
+    for(let x=-jOff;x<W+40;x+=40){ ctx.fillStyle=capCol; ctx.fillRect(x,pipeY-2,8,10); }
+    for(let x=-off-step;x<W+step;x+=step){
+      const idx=Math.floor((x+scroll)/step);
+      const m=((idx%IND_H_PATTERN.length)+IND_H_PATTERN.length)%IND_H_PATTERN.length;
+      const patt=IND_H_PATTERN[m], type=IND_TYPE[m], w=step-8;
+      if(type===1){                                    // skorsten med rok
+        const h=maxH*(0.95+patt*0.55), cw=w*0.34, top=GROUND_Y-h;
+        ctx.fillStyle=color; ctx.fillRect(x+w*0.33,top,cw,h);
+        ctx.fillStyle=capCol; ctx.fillRect(x+w*0.30,top-6,cw*1.14,7);
+        ctx.globalAlpha=0.32; ctx.fillStyle='#5a5048';
+        ctx.fillRect(x+w*0.40,top-26,cw*0.6,10); ctx.fillRect(x+w*0.36,top-42,cw*0.75,10);
+        ctx.globalAlpha=1;
+      } else if(type===2){                              // gantry-travers
+        const legH=maxH*0.62, top=GROUND_Y-legH-18;
+        ctx.fillStyle=color;
+        ctx.fillRect(x+w*0.10,top+18,w*0.10,legH);
+        ctx.fillRect(x+w*0.80,top+18,w*0.10,legH);
+        ctx.fillRect(x,top,w,18);
+        ctx.fillStyle=capCol; ctx.fillRect(x,top,w,4);
+      } else {                                          // fabriksbyggnad, sagtandat tak
+        const h=50+patt*maxH, top=GROUND_Y-h;
+        ctx.fillStyle=color; ctx.fillRect(x,top,w,h);
+        const teeth=4, tw=w/teeth;
+        for(let i=0;i<teeth;i++){ ctx.beginPath(); ctx.moveTo(x+i*tw,top); ctx.lineTo(x+i*tw+tw*0.5,top-10); ctx.lineTo(x+(i+1)*tw,top); ctx.closePath(); ctx.fill(); }
+        if(patt>0.45){ ctx.globalAlpha=0.5; ctx.fillStyle=capCol;
+          ctx.fillRect(x+6,top+22,4,5); ctx.fillRect(x+w-12,top+38,4,5); ctx.globalAlpha=1; }
+      }
+    }
+  }
 
   // player = MIO's artwork. neutral(1) running, jump = up(5)/apex(6), land/duck(4)
   const A_STAND=0.50, A_DUCK=1.183, A_UP=0.644, A_APEX=0.748;
@@ -1345,6 +1452,18 @@
     else { const bh=ducked?H_DUCK:H_STAND; ctx.fillStyle='#888'; ctx.fillRect(player.x,player.y-bh,P_W,bh); }
   }
 
+  // niva 5: krossbart industrihinder (TNT-lada), ritad i kod - traig, roda varningskryss, rostiga hornbultar
+  function drawCrate(x,y,w,h){
+    ctx.fillStyle='#5a3c22'; ctx.fillRect(x,y,w,h);
+    ctx.fillStyle='#3e2716'; ctx.fillRect(x,y,w,4);
+    ctx.fillStyle='#7a5334'; ctx.fillRect(x+3,y+4,w-6,h-8);
+    ctx.fillStyle='#c81a1a';
+    ctx.fillRect(x+w*0.42,y+h*0.18,w*0.16,h*0.64);
+    ctx.fillRect(x+w*0.18,y+h*0.42,w*0.64,h*0.16);
+    ctx.fillStyle='#241a10';
+    ctx.fillRect(x+2,y+2,3,3); ctx.fillRect(x+w-5,y+2,3,3);
+    ctx.fillRect(x+2,y+h-5,3,3); ctx.fillRect(x+w-5,y+h-5,3,3);
+  }
   function drawMempoolBlock(x,y,w,h,col){
     ctx.fillStyle='#15110d'; ctx.fillRect(x,y,w,h);
     ctx.fillStyle=col; ctx.globalAlpha=0.9; ctx.fillRect(x,y,w,4); ctx.globalAlpha=1;
@@ -1359,6 +1478,7 @@
       if(o.type==='ground'){
         const x=o.x,y=o.y-o.h,w=o.w,h=o.h;
         if(o.mp){ drawMempoolBlock(x,y,w,h,o.col); continue; }
+        if(o.crate){ drawCrate(x,y,w,h); continue; }
         ctx.fillStyle='#1a1714';ctx.fillRect(x,y,w,h);
         ctx.fillStyle=ORANGE;ctx.fillRect(x,y,w,5);
         ctx.fillStyle='#2a2420';ctx.fillRect(x,y+5,w*0.3,h-5);
@@ -1555,6 +1675,34 @@
     else { ctx.fillStyle='#c9d6dc'; ctx.fillRect(-hw/2,-hh/2,hw,hh*0.5); }
     ctx.restore();
   }
+  // niva 5: dynamitbunt (3-4 rода stavar, svart mittband, glodande stubiner, morkare hogersida = skugga/djup), ritad i kod
+  function drawDynamite(d){
+    const w=DYN_W, h=DYN_H, nStick=4, sw=w/nStick;
+    ctx.save(); ctx.translate(d.x,d.y); ctx.rotate(d.t*9);
+    for(let i=0;i<nStick;i++){
+      const sx=-w/2+i*sw;
+      ctx.fillStyle=(i===nStick-1)?'#7a1010':'#c81a1a';
+      ctx.fillRect(sx,-h/2,sw-1,h*0.78);
+    }
+    ctx.fillStyle='#0c0c0c'; ctx.fillRect(-w/2,-h/2+h*0.30,w,h*0.13);
+    for(let i=0;i<nStick;i++){
+      const sx=-w/2+i*sw+sw*0.5;
+      ctx.fillStyle='#0c0c0c'; ctx.fillRect(sx-1,-h/2-6,2,6);
+      const glow=0.5+0.5*Math.abs(Math.sin(d.t*20+i));
+      ctx.fillStyle=glow>0.75?'#fff3b0':'#ff9a1f';
+      ctx.fillRect(sx-1.5,-h/2-8,3,3);
+    }
+    ctx.restore();
+  }
+  function drawExplosion(d){
+    const t=d.boomT/BOOM_T, a=Math.max(0,1-t), s=14+t*30, s2=8+t*24;
+    ctx.save(); ctx.globalAlpha=a; ctx.fillStyle=t<0.35?'#fff3b0':'#ff9a1f';
+    ctx.fillRect(d.x-s/2,d.y-s/2,s,s);
+    ctx.globalAlpha=a*0.65; ctx.fillStyle='#242018';
+    ctx.fillRect(d.x-s2/2,d.y-s2/2-6,s2,s2);
+    ctx.restore();
+  }
+  function drawDynamites(){ for(const d of dynamites){ if(d.state==='fly') drawDynamite(d); else drawExplosion(d); } }
   // Chunky pixel-font "BIP" / "110" label, pre-rendered once to a tiny offscreen
   // canvas (nearest-neighbour upscaled at draw time) so it reads as blocky retro
   // text with no external font file.
@@ -1707,7 +1855,7 @@
   function render(){
     ctx.save();
     if(shakeT>0){const m=shakeT*46;ctx.translate((Math.random()-0.5)*m,(Math.random()-0.5)*m);}
-    drawBackground();drawObstacles();drawDrone();drawDuel();drawHammer();drawCoins();drawTx();
+    drawBackground();drawObstacles();drawDrone();drawDuel();drawHammer();drawDynamites();drawCoins();drawTx();
     { let _ga=1; if(exhaustedT>0||igrace>0){ _ga=(Math.floor((exhaustedT+igrace)*12)%2===0)?0.35:0.8; ctx.globalAlpha=_ga; } drawPlayer(); if(_ga<1)ctx.globalAlpha=1; }
     drawSwing();drawParticles();
     ctx.restore();
@@ -1719,6 +1867,9 @@
     else if(zoneBannerT>0&&state==='run'){ ctx.globalAlpha=Math.min(1,zoneBannerT); ctx.fillStyle=ORANGE;
       ctx.font='700 13px monospace'; ctx.textAlign='center';
       ctx.fillText('// DISTRICT: '+(zone==='roof'?'ROOFTOPS':'STREETS'), W/2, 92); ctx.globalAlpha=1; }
+    else if(rockHintT>0&&state==='run'){ ctx.globalAlpha=Math.min(1,rockHintT); ctx.fillStyle=ORANGE;
+      ctx.font='700 12px monospace'; ctx.textAlign='center';
+      ctx.fillText('BLOW UP THE ROCK.', W/2, 92); ctx.globalAlpha=1; }
     if(charges>0){ for(let i=0;i<charges;i++){ const x=W-30-i*22, y=22;
       ctx.fillStyle='#9a9a9a'; ctx.fillRect(x,y,16,9);
       ctx.fillStyle='#6b6b6b'; ctx.fillRect(x+1,y+1,4,7);
@@ -1738,10 +1889,13 @@
       if(o.x+(o.w||0) < px-6) continue;                // already passed
       const d=o.x-front;
       if(o.type==='rope'){ if(!o.cut && d>10 && d<200) shoot=true; continue; }
-      if(o.type==='mtn'){ if(o.hp>0){ if(charges>0 && d>-40 && d<320) shoot=true;
+      if(o.type==='mtn'){ if(o.hp>0){
+          if(level===5){ if(d>-40 && d<380) shoot=true; if(d<ngd){ ngd=d; ngObs=o; } }   // niva 5: kasta dynamit, men var redo att hoppa om den inte hinner sprangas
+          else if(charges>0 && d>-40 && d<320) shoot=true;
           else if(charges<=0 && d<ngd){ ngd=d; ngObs=o; } }             // no charge -> treat wall as jump threat (bail)
         continue; }
       if(o.type==='air'){ if(d<nad){ nad=d; naObs=o; } continue; }
+      if(level===5 && o.crate && o.hp>0 && d>-40 && d<380) shoot=true;   // niva 5: prova sprang krossbara hinder med dynamit (aldrig obligatoriskt, forfaller till vanligt hopp nedan)
       if(d<ngd){ ngd=d; ngObs=o; }                     // ground / fall solid
     }
     // fallers already on/near the ground path behave like solid blocks
@@ -1912,7 +2066,7 @@
       spawnCoinAt:(dx,dy)=>{ if(state==='run')coinsArr.push({x:player.x+P_W/2+(dx==null?260:dx),y:player.y-curH()*0.5+(dy||0),bob:0,got:false}); },
       spawnHeartAt:(dx,dy)=>{ if(state==='run')hearts.push({x:player.x+P_W/2+(dx==null?260:dx),y:player.y-curH()*0.5+(dy||0),bob:0,got:false}); },
       clearPickups:()=>{ coinsArr.length=0; hearts.length=0; },
-      clearObstacles:()=>{ obstacles.length=0; gaps.length=0; drone=null; boss=null; roofBoss=null; surge=null; ropeBalls.length=0; fallers.length=0; },
+      clearObstacles:()=>{ obstacles.length=0; gaps.length=0; drone=null; boss=null; roofBoss=null; surge=null; ropeBalls.length=0; fallers.length=0; dynamites.length=0; },
       coinInfo:()=>({n:coinsArr.length,coins,dx:coinsArr[0]?Math.round(coinsArr[0].x-(player.x+P_W/2)):null,cy:coinsArr[0]?Math.round(coinsArr[0].y):null}),
       heartInfo:()=>({n:hearts.length,heartsGot,dx:hearts[0]?Math.round(hearts[0].x-(player.x+P_W/2)):null}),
       setScoreState:(d,c,b)=>{ if(d!=null)dist=d; if(c!=null)coins=c; if(b!=null)bonus=b; },
