@@ -198,8 +198,8 @@
   const GRAV=3000, JUMP_V=-1220, JUMP_CUT=0.60, COYOTE=0.11, BUFFER=0.13;
   const H_STAND=140, H_DUCK=59, P_W=70;            // real sprite (aspect 0.5)
   const SPD_START=189, SPD_RAMP=2.8, SPD_MAX=610;
-  const DRONE_ENABLED=false;                       // sla pa dronaren igen genom att satta true
-  const LVL_LEN=[0,4500,7500,9000,18000,16000,20000,16000,18000,999999,23000,999999];
+  const DRONE_ENABLED=true;                        // atteraktiverad ETAPP 4: dronaren begransas till niva 4 via egen level===4-sparr (se spawn-anropet)
+  const LVL_LEN=[0,4500,7500,9000,9000,16000,20000,16000,18000,999999,23000,999999];
   const LVL_SPD=[0,205,221,232,248,243,265,254,275,281,297,313];
   const LVL_HINT=['','JUMP \u25b2 HOLD=HIGHER  DUCK \u25bc  SHOOT \u2726=ROPES','SHOOT \u2726=ROPES \u00b7 GOLD RUNE = 5 \u20bf, GRAB FAST','NEW: FALLING BLOCKS \u2014 watch the mark','COMBINE.','NEW: SHOOT \u2726 \u2014 cut the ropes','EVERYTHING. FASTER.','DISTRICT: ROOFTOPS','ROOFTOPS + FALLING SKY','BIP 110 AWAITS','ALL OF IT.','THE CITY IS YOURS'];
   const BAR_BOTTOM_OFF=108;
@@ -232,7 +232,7 @@
   const RUNE_AR=0.8125, RUNE_W=29, RUNE_OFF=16, RUNE_BTC=5, RUNE_LIFE=3.4;  // guld-runa pa bergstoppen
   // rare sat (niva 2): silverfargad myntvariant pa ett plattformsblock
   const SAT_BTC=21, SAT_CHANCE=0.60, SAT_WIN_FROM=3750, SAT_WIN_TO=6500;
-  const SAT_GUARANTEED_LEVELS=[2,3];   // 100% chans pa dessa nivaer istallet for SAT_CHANCE
+  const SAT_GUARANTEED_LEVELS=[2,3,4];   // 100% chans pa dessa nivaer istallet for SAT_CHANCE
   const SAT_BLOCK_H=120, SAT_BLOCK_W=110;
   // sat-hojd: fast varde 320 (total 120+320=440 px over marken; onabar fran marken >414, nabar med hopp fran blocket <534, marginal 94)
   const SAT_ABOVE_BLOCK = 320;
@@ -626,8 +626,8 @@
         } else { spawnX-=iMaxGap; }                                   // annars: forsok igen nasta anrop
       }
     }
-    // ---------- KOMBOBIBLIOTEK (niva 2 och 3): tre handdesignade monster; niva 3 glesare (0.22) sa den inte kanns som niva 2 ----------
-    if((level===2||level===3) && Math.random()<(level===3?0.22:0.33)){
+    // ---------- KOMBOBIBLIOTEK (niva 2, 3 och 4): tre handdesignade monster; niva 3 glesare (0.22), niva 4 annu glesare (0.16) -> dronaren far ta rytmutrymmet ----------
+    if((level===2||level===3||level===4) && Math.random()<(level===3?0.22:level===4?0.16:0.33)){
       const ct=Math.min(1,(speed-SPD_START)/300);
       const tMinGap=Math.max(380-ct*40, speed*0.82+80), tMaxGap=tMinGap+150+ct*60;
       const tailGap=tMinGap+Math.random()*(tMaxGap-tMinGap);
@@ -665,7 +665,7 @@
     let type, action='jump';
     if((level===5?lvlDist>1500:(level===6||level>=10)) && charges>0 && r<0.15){ type='mtn'; }
     else if(!lastWasRope && ((level===2 && r<0.40) || ((level===5?lvlDist>1500:(level===6||level>=10)) && r<0.30))){ type='rope'; }
-    else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):(level===3?0.46:0.38));   // niva 3: hogre duck-andel (0.46) -> egen hopp/duck-rytm mot niva 2
+    else { const airP=level===1?(0.12+0.22*Math.min(1,lvlDist/24000)):(level===2?(0.30+0.18*Math.min(1,lvlDist/34000)):(level===3?0.46:level===4?0.34:0.38));   // niva 3: hogre duck-andel (0.46); niva 4: lagre (0.34) -> hopp-tung marklinje, dronaren star for duck-signumet
       if(r<1-airP){ type='ground'; } else { type='air'; action='duck'; } }
     // luckor: mer luft tidigt, extra nar man maste byta stallning (ducka<->hoppa)
     const minGap=Math.max(380-t*40, speed*0.82+80);   // landningsrum skalar med farten -> aldrig kortare an ett hopp
@@ -692,14 +692,14 @@
       obstacles.push({type:'air',x:spawnX,bottom:GROUND_Y-BAR_BOTTOM_OFF,w:bw,h:240});
       spawnX+=bw+gap;
     }
-    // ---------- MYNTBAGAR (niva 2: ~var tredje hinder; niva 3: glesare ~var femte, varannan bage hog) ----------
-    if((level===2||level===3) && Math.random()<(level===3?0.20:0.33)){
+    // ---------- MYNTBAGAR (niva 2: ~var tredje hinder; niva 3 och 4: glesare ~var femte, varannan bage hog; niva 4: brotema, speglar hangbrons kablar) ----------
+    if((level===2||level===3||level===4) && Math.random()<((level===3||level===4)?0.20:0.33)){
       const arcFrom=preSpawnX+70, arcTo=spawnX-60;
       if(arcTo>arcFrom+80){
         const n=3+Math.floor(Math.random()*3);
         const step=(arcTo-arcFrom)/Math.max(1,n-1);
         let highArc=false;
-        if(level===3){ l3ArcHigh=!l3ArcHigh; highArc=l3ArcHigh; }   // niva 3: varannan bage hog -> kraver hopp
+        if(level===3||level===4){ l3ArcHigh=!l3ArcHigh; highArc=l3ArcHigh; }   // niva 3/4: varannan bage hog -> kraver hopp
         const base=highArc?190:70;                                  // hog: andmynt Hc=190 (>166 standrackvidd), topp Hc=320 (<414 hopprackvidd, marginal 94); lag: som niva 2 (topp 200)
         for(let i=0;i<n;i++){
           const tt=n>1?i/(n-1):0.5;
@@ -710,7 +710,8 @@
     }
     lastAction=action; lastWasRope=(type==='rope');
   }
-  function spawnDrone(){ if(!DRONE_ENABLED)return; drone={x:W+80,y:GROUND_Y-260,phase:'in',t:0,bob:0,beamY:GROUND_Y-BAR_BOTTOM_OFF}; }
+  function spawnDrone(){ if(!DRONE_ENABLED)return; drone={x:W+80,y:GROUND_Y-260,phase:'in',t:0,bob:0,beamY:GROUND_Y-BAR_BOTTOM_OFF};
+    obstacles=obstacles.filter(o=>!(o.type==='ground'||o.type==='air'||o.type==='rope')||o.x<player.x-60); }   // niva 4: rensa koade hinder framfor spelaren (samma teknik som "clean run-up" pa niva 6:s vattenovergang) -> attacken far garanterat fri mark under hela sin livscykel
 
   // ---------- update ----------
   function update(dt){
@@ -809,7 +810,7 @@
         for(let i=0;i<14;i++)particles.push({x:ht.x,y:ht.y,vx:(Math.random()-0.5)*300,vy:(Math.random()-0.8)*300,life:0.4+Math.random()*0.3,c:Math.random()<0.5?'#e03a3a':'#f0889a',s:3+Math.random()*3}); } }
     hearts=hearts.filter(ht=>!ht.got&&ht.x>-40);
     // ---------- FALLING BLOCKS ----------
-    const fallOK = ((level===3&&lvlDist>1500)||level===4||level===6||(level===7&&lvlDist>2000)||level===8||level>=10) && !gaps.some(g=>g.water);
+    const fallOK = ((level===3&&lvlDist>1500)||level===6||(level===7&&lvlDist>2000)||level===8||level>=10) && !gaps.some(g=>g.water);   // niva 4 undantagen: fallande block ar niva 3:s signum, inte niva 4:s
     if(fallOK && !roofBoss && !surge){ fallX-=speed*dt;
       if(fallX<=0){ const fx=player.x+300+Math.random()*240;
         const warnT=(level===3?1.0:0.65), fallFlightT=(level===3?1.70:1.35);   // niva 3: langre varning 1.0s; landX-estimat matchar (1.0 varning + 0.70 falltid)
@@ -844,8 +845,8 @@
     // ---------- STREET HEART ----------
     if(level>=2 && zone==='street' && !heartLvlDone && lvlDist>LVL_LEN[Math.min(level,10)]*0.55){
       heartLvlDone=true; hearts.push({x:W+80,y:GROUND_Y-232,bob:0,got:false}); }
-    // ---------- RARE SAT (niva 2 och 3): max 1/niva; niva 2/3 garanterad (SAT_GUARANTEED_LEVELS); hoppblock + sat utom rackhall fran marken ----------
-    if((level===2||level===3) && zone==='street' && !rareSatSpawned){
+    // ---------- RARE SAT (niva 2, 3 och 4): max 1/niva; niva 2/3/4 garanterad (SAT_GUARANTEED_LEVELS); hoppblock + sat utom rackhall fran marken ----------
+    if((level===2||level===3||level===4) && zone==='street' && !rareSatSpawned){
       if(!rareSatRolled && lvlDist>SAT_WIN_FROM){ rareSatRolled=true; rareSatWillSpawn=SAT_GUARANTEED_LEVELS.includes(level)?true:Math.random()<SAT_CHANCE; }
       if(rareSatRolled){
         if(!rareSatWillSpawn || lvlDist>=SAT_WIN_TO){ rareSatSpawned=true; }
@@ -954,9 +955,12 @@
 
     const droneActive=drone&&(drone.phase==='charge'||drone.phase==='fire');
     droneTimer-=dt;
-    const droneOK = level>=11 ? speed>360 : ((level===2&&lvlDist>2200)||level===4||level===6||((level===7||level===8)&&lvlDist>1200));
+    const droneOK = level>=11 ? speed>360 : ((level===2&&lvlDist>2200)||(level===4&&lvlDist>2200)||level===6||((level===7||level===8)&&lvlDist>1200));
     const waterOn=gaps.some(g=>g.water);
-    if(DRONE_ENABLED&&!drone&&!boss&&!roofBoss&&droneOK&&droneTimer<=0&&!surge&&!waterOn&&!plats.some(p=>p.roof)&&gaps.length===0&&!obstacles.some(o=>o.type==='ground'||o.type==='air'||o.type==='rope'))spawnDrone();
+    // niva 4: banan haller normalt flera hinder koade samtidigt (inte bara ett i taget), sa "obstacles helt tom" skulle i praktiken aldrig intraffa.
+    // krav istallet: inget hinder inom 1,5s bakom eller inom 1,5s framfor spelaren (spawnDrone rensar sedan hela den koade banan framfor -> attacken far garanterat fri mark under hela sin livscykel, se spawnDrone).
+    const droneAheadClear = !obstacles.some(o=>(o.type==='ground'||o.type==='air'||o.type==='rope') && Math.abs(o.x-player.x)<speed*1.5);
+    if(DRONE_ENABLED&&level===4&&!drone&&!boss&&!roofBoss&&droneOK&&droneTimer<=0&&!surge&&!waterOn&&!plats.some(p=>p.roof)&&gaps.length===0&&droneAheadClear)spawnDrone();
     if(!drone&&!boss&&zone!=='roof'&&spawnX<W+160&&!surge&&!waterOn)spawnGround();
 
     const _oT=trait(), pad=(_oT.hitPad!=null?_oT.hitPad:7), _airLen=_oT.airLeniency||0;
@@ -988,7 +992,7 @@
       if(drone.phase==='in'){const tx=W*0.66;drone.x+=(tx-drone.x)*Math.min(1,dt*4);if(Math.abs(drone.x-tx)<6){drone.phase='charge';drone.t=0;}}
       else if(drone.phase==='charge'){if(drone.t>1.0){drone.phase='fire';drone.t=0;flashT=Math.max(flashT,0.06);}}
       else if(drone.phase==='fire'){const by=drone.beamY,band=15;if(py<by+band&&py+ph>by-band){die();return;}if(drone.t>0.36){drone.phase='out';drone.t=0;}}
-      else if(drone.phase==='out'){drone.x-=420*dt;if(drone.x<-100){drone=null;droneTimer=10+Math.random()*6;}}
+      else if(drone.phase==='out'){drone.x-=420*dt;if(drone.x<-100){drone=null;droneTimer=10+Math.random()*6;spawnX=Math.max(spawnX,W+speed*1.5);}}   // niva 4: garantera minst 1,5s fri mark EFTER attacken (spawnX rullar annars vidare under hela dronarens livscykel och skulle annars kunna hamna for nara)
       if(drone) drone.y+=Math.sin(drone.bob*4)*0.6;
     }
 
@@ -1132,7 +1136,7 @@
 
   // ---------- draw ----------
   function drawBackground(){
-    ctx.fillStyle=(level===3?'#64462e':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: morkare aprikos himmel (855d3d *0.75; byte exakt vid nivaovergang 2->3 och 3->4)
+    ctx.fillStyle=(level===3?'#64462e':level===4?'#2a2049':NIGHT); ctx.fillRect(0,0,W,H);   // niva 3: morkare aprikos himmel; niva 4: lila skymning (byte exakt vid nivaovergang 3->4 och 4->5)
     if(blueBlend>0.01){ ctx.globalAlpha=0.30*blueBlend; ctx.fillStyle='#1a3a7a'; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1; }
     if(zoneBlend>0.01){
       ctx.globalAlpha=zoneBlend; ctx.fillStyle='#5b1b20'; ctx.fillRect(0,0,W,H);
@@ -1145,6 +1149,9 @@
     if(level===3){                                        // niva 3: Gamla Stockholm-siluett (tinnar och torn) ersatter skyskrapssiluetten
       drawOldTown(bgScroll*0.25,190,'#412c1d','#5c4419',84);   // ytterligare *0.75 (behaller aprikos/varm ton)
       drawOldTown(bgScroll*0.5,140,'#2e1d14','#534327',60);
+    } else if(level===4){                                 // niva 4: brodistrikt (hangbro-pyloner + kablar) i lila skymning
+      drawBridgeDistrict(bgScroll*0.25,190,'#221934','#4a3a66',96);
+      drawBridgeDistrict(bgScroll*0.5,140,'#170f24','#382c50',72);
     } else {
       drawSkyline(bgScroll*0.25,200,'#0c1620',80,9000);
       drawSkyline(bgScroll*0.5,150,'#0a1118',58,4500);
@@ -1243,6 +1250,41 @@
       }
       if(patt>0.5){ ctx.globalAlpha=0.5; ctx.fillStyle=capCol;   // enstaka upplysta fonster (varm accent)
         ctx.fillRect(x+6,top+20,4,5); ctx.fillRect(x+w-12,top+40,4,5); ctx.globalAlpha=1; }
+    }
+  }
+  // Brodistrikt-siluett (endast niva 4): hangbro-pyloner med hangande kablar mellan sig, lagre husrader emellan, ritad i kod.
+  // Fast monster (som OLD_H_PATTERN) sa siluetten tilar somlost utan flimmer nar bgScroll rullar.
+  const BRIDGE_H_PATTERN=[0.32,0.5,0.4,0.58,0.3,0.46,0.36,0.52];
+  const BRIDGE_PYLON_STEP=4;   // var 4:e tile ar en bropylon
+  function drawBridgeDistrict(scroll,maxH,color,capCol,step){
+    const off=scroll%step;
+    const pylonH=maxH*1.4, cableSag=maxH*0.55;
+    let prevX=null, prevY=null;
+    for(let x=-off-step*2;x<W+step;x+=step){
+      const idx=Math.floor((x+scroll)/step);
+      const w=step-8;
+      const isPylon=((idx%BRIDGE_PYLON_STEP)+BRIDGE_PYLON_STEP)%BRIDGE_PYLON_STEP===0;
+      if(isPylon){
+        const h=pylonH, top=GROUND_Y-h, cx=x+w*0.5;
+        if(prevX!=null){                                  // hangande kabel mellan tva pyloner (speglar brokablarna)
+          ctx.strokeStyle=color; ctx.lineWidth=4;
+          ctx.beginPath(); ctx.moveTo(prevX,prevY);
+          ctx.quadraticCurveTo((prevX+cx)/2,top+cableSag,cx,top);
+          ctx.stroke();
+        }
+        ctx.fillStyle=color;
+        ctx.fillRect(x+w*0.34,top,w*0.32,h);               // pylontorn
+        ctx.fillRect(x+w*0.16,top,w*0.68,h*0.09);           // toppbalk
+        ctx.fillRect(x+w*0.16,GROUND_Y-h*0.4,w*0.68,h*0.08);// mellanbalk
+        prevX=cx; prevY=top;
+      } else {
+        const m=((idx%BRIDGE_H_PATTERN.length)+BRIDGE_H_PATTERN.length)%BRIDGE_H_PATTERN.length;
+        const patt=BRIDGE_H_PATTERN[m];
+        const h=55+patt*maxH*0.55, top=GROUND_Y-h;
+        ctx.fillStyle=color; ctx.fillRect(x,top,w,h);
+        if(patt>0.42){ ctx.globalAlpha=0.5; ctx.fillStyle=capCol;   // enstaka upplysta fonster
+          ctx.fillRect(x+6,top+18,4,5); ctx.fillRect(x+w-12,top+34,4,5); ctx.globalAlpha=1; }
+      }
     }
   }
 
