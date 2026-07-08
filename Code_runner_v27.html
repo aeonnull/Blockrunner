@@ -225,6 +225,7 @@
   const starImg=new Image(); starImg.src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADUAAAAoCAYAAABerrI1AAAAnElEQVR42u2ZywnAIBBE15COcrIH21hSqtXYQ65hyUHMeIh5c1sQ4bGf8ZNsQKWU08bk96DWetzj1loygTZbUEB9RUm10UOfeVwTe6hHI31G+QEFlFa70HydTAEFVJ/5zjJWlaJBU35AASUeFJ23WJ8xFHLOcdiQKaAwX8yX8gOKQfHiNswTGeX3RyjlaxKZAgooTukS8ecL1OpQFyTlNIGr9AxgAAAAAElFTkSuQmCC';
   const bossImg=new Image(); bossImg.src='data:image/png;base64,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';
   const MTN_W=140, MTN_H=210, SWING_T=0.30, SWING_HIT=0.12;
+  const MTN5_H=360;                   // niva 5:s garanterade berg: massiv ooverhoppbar dodsvagg, ~halva skarmen (>hoppapex 248). ENDAST niva 5:s berg; MTN_H (niva 6/10/11) oror.
   // niva 5: dynamit (kastad, ersatter narstridssvepet dar) + krossbara industrihinder
   const DYN_W=20, DYN_H=26, DYN_VX=560, DYN_VY0=-540, DYN_GRAV=2000, DYN_HIT_R=32, BOOM_T=0.28;
   const DYN_DRAW=1.4;                 // niva 5: dynamitens RITSTORLEK +40% (bade kastad sprite och pickup). Kastbana/DYN_VX/DYN_VY0/DYN_GRAV samt hitbox (DYN_HIT_R) ar oberoende och OROR.
@@ -258,7 +259,7 @@
   let lbFallback=[{n:'MIO',s:1450},{n:'SATOSHI',s:1120},{n:'ORDINAL',s:880},{n:'BLOCK',s:610},{n:'DEGEN',s:420}];
   function esc(t){return String(t).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));}
   let player,obstacles,particles,spawnX,bgScroll,shakeT,flashT,coinsArr,coinTimer,lastAction,lastWasRope;
-  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0,rareSatRolled=false,rareSatWillSpawn=false,rareSatSpawned=false,rareSatCollectedThisLevel=false,introBlockSpawned=false,lvlRuneSpawned=false,lvlRuneTriggerAt=0,l3ArcHigh=false,dynamites=[],mtnSpawned=false,mtnTriggerAt=0,rockHintT=0,l5ArcFlat=false,dynAmmo=0,dynPickups=[],dynTeachSpawned=false,dynPreMtnSpawned=false,dynScatterTimer=0;
+  let coyote,buffer,jumpHeld,ducking,deadCooldown=0,drone=null,droneTimer,landT=0,fireT=0,fireCd=0,hammer=null,hammerTimer,zapT=0,charges=0,swingT=0,swingTarget=null,swingHit=false,demo=false,botHold=0,botShortHop=false,boss=null,bossTimer=24,shieldPick=null,shieldTimer=16,hasShield=false,shieldFlashT=0,gaps=[],zone='street',zoneT=2200,gapX=0,zoneBannerT=0,stars=[],ropeBalls=[],lanterns=[],lanternTimer=2,roofBoss=null,pendingRoofBoss=false,roofVisits=0,level=1,startLevel=1,maxLevel=1,lvlDist=0,lvlBannerT=0,bossDone=false,zoneBlend=0,clearedT=0,plats=[],hearts=[],heartsGot=0,starsThrown=0,platX=0,raisedX=0,roofRuns=0,l1Idx=0,l1RewardIdx=0,l1RewardT=0,heartsSpawned=0,roofRopeTimer=0,roofRuneDone=false,blueBlend=0,fallers=[],fallX=1400,heartLvlDone=false,waterDone=false,hamHintShown=false,hamHintT=0,mtnHintShown=false,mtnHintT=0,rareSatRolled=false,rareSatWillSpawn=false,rareSatSpawned=false,rareSatCollectedThisLevel=false,introBlockSpawned=false,lvlRuneSpawned=false,lvlRuneTriggerAt=0,l3ArcHigh=false,dynamites=[],mtnSpawned=false,mtnTriggerAt=0,rockHintT=0,l5ArcFlat=false,dynAmmo=0,dynPickups=[],dynTeachSpawned=false,dynPreMtnSpawned=false,dynScatterTimer=0,mtn5Destroyed=false;
   let igrace=0,exhaustedT=0;
   let bonus=0,blockHeight,blockFill,chain,surge,txArr,txTimer,confirmMsgT,txPops;
 
@@ -274,7 +275,7 @@
     speed=LVL_SPD[Math.min(level,11)]; heartLvlDone=false; waterDone=false;
     rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     introBlockSpawned=false; lvlRuneSpawned=false; l3ArcHigh=false; lvlRuneTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.45);
-    mtnSpawned=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.40); rockHintT=0; l5ArcFlat=false;
+    mtnSpawned=false; mtn5Destroyed=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.85+Math.random()*0.03); rockHintT=0; l5ArcFlat=false;
     plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400; dynamites=[];
     if(zone==='roof')roofRuns++; fireT=0; fireCd=0; hammer=null; hammerTimer=14; zapT=0; charges=0; swingT=0; swingTarget=null; swingHit=false;
     coinsArr=[]; coinTimer=2.0; coins=0; runesGot=0; satsGot=0;
@@ -510,6 +511,7 @@
     levelUp(); spawnX=W+340; state='run';
   }
   function levelUp(){
+    if(window.__levelUpLog) window.__levelUpLog.push({fromLevel:level,mtnSpawned,mtn5Destroyed});   // dev-only (#dev): exakt, race-fri logg av tillstandet i SAMMA synkrona anrop som overgangen, for automatiserad testning
     level++; maxLevel=Math.max(maxLevel,level); lvlDist=0; lvlBannerT=2.6;
     if(level>=7&&level<=9){ if(zone!=='roof'){ zone='roof'; gapX=W+340; platX=W+600; raisedX=W+900; roofRuns++; } }
     else { zone='street'; }
@@ -518,7 +520,7 @@
     heartLvlDone=false; waterDone=false;
     rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     introBlockSpawned=false; lvlRuneSpawned=false; l3ArcHigh=false; lvlRuneTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.45);
-    mtnSpawned=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.40); rockHintT=0; l5ArcFlat=false; dynamites=[];
+    mtnSpawned=false; mtn5Destroyed=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.85+Math.random()*0.03); rockHintT=0; l5ArcFlat=false; dynamites=[];
     if(level===5) charges=0;   // niva 5: dynamit ersatter hammar-svepet, ingen kvarhangande charge ska kunna trigga det gamla svepet
     igrace=0; exhaustedT=0;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL is re-shielded on each new level
@@ -537,7 +539,7 @@
     speed=LVL_SPD[Math.min(level,11)]; heartLvlDone=false; waterDone=false;
     rareSatRolled=false; rareSatWillSpawn=false; rareSatSpawned=false; rareSatCollectedThisLevel=false;
     introBlockSpawned=false; lvlRuneSpawned=false; l3ArcHigh=false; lvlRuneTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.45);
-    mtnSpawned=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.30+Math.random()*0.40); rockHintT=0; l5ArcFlat=false;
+    mtnSpawned=false; mtn5Destroyed=false; mtnTriggerAt=LVL_LEN[Math.min(level,10)]*(0.85+Math.random()*0.03); rockHintT=0; l5ArcFlat=false;
     plats=[]; hearts=[]; platX=W+600; raisedX=W+900; l1Idx=0; l1RewardIdx=0; l1RewardT=0; heartsSpawned=0; roofRopeTimer=6; roofRuneDone=false; fallers=[]; fallX=1400; dynamites=[];
     if(zone==='roof')roofRuns++; fireT=0; fireCd=0; hammer=null; hammerTimer=14; zapT=0; charges=0; swingT=0; swingTarget=null; swingHit=false;
     coinsArr=[]; coinTimer=2.0;
@@ -551,9 +553,10 @@
     if(state!=='run') return;                 // already dead / not in play
     if(igrace>0) return;                       // brief invulnerability after a save
     const pit = cause==='pit';                 // falling into the void can't be shielded/dodged
-    // DEMO: bot shrugs off every hit (except falling in a pit) so the showcase always reaches the ninja + boss fights
-    if(demo && !pit){ igrace=0.6; shieldFlashT=0.3; flashT=Math.max(flashT,0.06); return; }
-    if(!pit){
+    const unblockable = pit || cause==='wall';  // niva 5:s berg (endBerg): som grop - kan ej skyddas/undvikas/demo-ryckas bort, bara sat/runa raddar (se dc87b63-defekten: standard die() lat spelaren "ryck pa axlarna" och glida rakt igenom via demo-shrug/skold/dodge)
+    // DEMO: bot shrugs off every hit (except falling in a pit / the niva 5-berget) so the showcase always reaches the ninja + boss fights
+    if(demo && !unblockable){ igrace=0.6; shieldFlashT=0.3; flashT=Math.max(flashT,0.06); return; }
+    if(!unblockable){
       const _dT=trait();
       // CHARCOAL / shield pickup: absorb one hit for free, keep running
       if(hasShield){ hasShield=false; shieldFlashT=0.5; igrace=0.9;
@@ -702,7 +705,7 @@
       obstacles.push({type:'rope',x:spawnX,w:ROPE_W,cut:false,fallY:0,fallV:0,cutY:0});
       spawnX+=ROPE_W+gap+50;
     } else if(type==='ground'){
-      if(level===5 && Math.random()<0.35){                // niva 5: krossbart industrihinder - samma "ground"-kollision (alltid hoppbart), dynamit ger extra poang
+      if(level===5 && Math.random()<0.35){                // niva 5: krossbar TNT-lada - samma "ground"-kollision (alltid hoppbar/valfri), sprangbar med dynamit men GER INGEN beloning
         obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:CRATE_W,h:CRATE_H,crate:true,hp:1});
         spawnX+=CRATE_W+gap;
       } else {
@@ -763,7 +766,9 @@
       if(level===9){ if(bossDone){ bonus+=150*bmult(); levelUp(); }
         else if(heartsGot<L9_NEED && !roofBoss && lvlDist>16000){ bonus+=150*bmult(); levelUp(); } }
       else if(level===7 && bossDone){ bonus+=150*bmult(); levelUp(); }
-      else if(lvlDist>LVL_LEN[level] && !surge && !boss && !roofBoss){ bonus+=150*bmult(); levelUp(); }
+      // niva 5: klaras forst nar lvlDist>9000 OCH det garanterade berget ar sprangt (speglar niva 7/9:s bossDone-gate). Berget ar ooverhoppbart -> enda vagen forbi ar att spranga det -> nivan kan ej klaras utan spraningen.
+      // mtn5Destroyed ar en bestandig flagga (satt vid krossning, se dynamit-traffkoden) - INTE harledd fran obstacles-arrayen, eftersom det generella "utanfor skarm"-filtret tar bort ALLA mtn-objekt (aven osprangda) nar de rullat forbi x=-60, vilket annars skulle oppna grinden felaktigt.
+      else if(lvlDist>LVL_LEN[level] && !surge && !boss && !roofBoss && !(level===5 && (!mtnSpawned || !mtn5Destroyed)) ){ bonus+=150*bmult(); levelUp(); }
     } else {
       zoneT-=speed*dt;
       if(roofBoss)zoneT=Math.max(zoneT,600);
@@ -919,12 +924,16 @@
           && !gaps.some(g=>bx>g.x-70 && bx<g.x+g.w+70)
           && !plats.some(p=>bx>p.x-80 && bx<p.x+p.w+80)
           && !dynPickups.some(q=>Math.abs(q.x-bx)<80);          // aldrig staplade pickups
-      // 1) GARANTERAD LARO-PICKUP tidigt (langt fore berget; mtnTriggerAt >= 0.30*9000 = 2700). Ensam i fri vag sa spelaren lar sig vad dynamit ar.
+      // 1) LARO-SEKVENS (garanterad): dynamit-pickup + en TNT-lada ~250px efter, i ren korridor -> plocka dynamit, se ladan, spranga, forsta vapnet. Ladan valfri (hoppbar). Langt fore berget (mtnTriggerAt ~0.85-0.88*9000).
       if(!dynTeachSpawned && lvlDist>700){
-        const bx=W+60; if(dpClear(bx)){ dynPickups.push({x:bx,y:dpY,bob:0,got:false}); dynTeachSpawned=true; }
-        else if(lvlDist>1700){ dynTeachSpawned=true; }          // sakerhetsventil: sluta forsoka om aldrig fritt (pre-berg-paret + scatter garanterar anda ammo)
+        const bx=W+60;
+        if(dpClear(bx) && !obstacles.some(o=>Math.abs(o.x-(bx+250))<150)){
+          dynPickups.push({x:bx,y:dpY,bob:0,got:false});
+          obstacles.push({type:'ground',x:bx+250,y:GROUND_Y,w:CRATE_W,h:CRATE_H,crate:true,hp:1});   // laro-lada (valfri att spranga)
+          dynTeachSpawned=true;
+        } else if(lvlDist>1700){ dynTeachSpawned=true; }        // sakerhetsventil: sluta forsoka om aldrig fritt (pre-berg-paret + scatter garanterar anda ammo)
       }
-      // 2) GARANTERAT PRE-BERG-PAR: tva pickups (=4 kast) placerade ~900 lvlDist FORE berget, i den rena korridoren (berget-zonen halls fri av spawn-skyddet).
+      // 2) GARANTERAT PRE-BERG-PAR: tva pickups (=4 kast) placerade ~900 lvlDist FORE berget (nu nara slutet), i den rena korridoren (spawn-skyddet nedan haller lador/hinder borta fran bergzonen -> dessa 4 kast kan aldrig slosas pa lador vid berget).
       //    Paret spawnar ALLTID fore berget (berget nedan kraver dynPreMtnSpawned) och ligger narmare spelaren an berget -> plockas alltid forst. Ger garanterat >=4 kast vid berget (hp 3, marginal 1).
       if(!dynPreMtnSpawned && !mtnSpawned && lvlDist>mtnTriggerAt-900){
         const bx=W+60; if(dpClear(bx) && dpClear(bx+90)){
@@ -939,18 +948,15 @@
         else dynScatterTimer=0.4;                               // inte fritt just nu -> forsok snart igen
       }
     }
-    // ---------- GARANTERAT BERG (niva 5): berget spawnas EN gang, sprangs med dynamit, ger nivans garanterade runa (ateranvander bergets befintliga hp/bonus/runa-logik, se svep- och dynamit-koden) ----------
-    if(level===5 && zone==='street' && !mtnSpawned){
-      if(lvlDist>=LVL_LEN[Math.min(level,10)]*0.75){ mtnSpawned=true; }
-      else if(lvlDist>mtnTriggerAt && dynPreMtnSpawned){        // berget dyker aldrig upp innan dess garanterade dynamit-par ligger ute -> spelaren har alltid ammo nar berget nas
-        const mtnBx=W+420, mtnSafeGap=Math.max(220,speed*0.9);   // annan bx-offset an saten (W+260)/runan (W+80) sa de sallan konkurrerar om samma skarmposition
-        const mtnClear = !obstacles.some(o=>Math.abs(o.x-mtnBx)<mtnSafeGap)
-          && !gaps.some(g=>mtnBx>g.x-60 && mtnBx<g.x+g.w+60)
-          && !plats.some(p=>mtnBx>p.x-70 && mtnBx<p.x+p.w+70);
-        if(mtnClear){
-          obstacles.push({type:'mtn',x:mtnBx,w:MTN_W,hp:3,runeGot:false});
-          mtnSpawned=true; rockHintT=2.4;
-        }
+    // ---------- GARANTERAT BERG (niva 5): massiv OOVERHOPPBAR dodsvagg nara slutet. Spawnas GARANTERAT (ingen 0.75-skip), sprangs med 3 dynamitkast, slapper runan 100%, oppnar vagen. Nivan kan ej klaras utan att berget sprangs (se slutgaten nedan). ----------
+    if(level===5 && zone==='street' && !mtnSpawned && lvlDist>mtnTriggerAt && dynPreMtnSpawned){   // berget dyker aldrig upp innan dess garanterade dynamit-par ligger ute -> spelaren har alltid ammo nar berget nas
+      const mtnBx=W+420, mtnSafeGap=Math.max(220,speed*0.9);   // spawn-skyddet nedan har redan tystat nya hinder i slutzonen -> denna kollar bara att befintliga hunnit scrolla bort
+      const mtnClear = !obstacles.some(o=>Math.abs(o.x-mtnBx)<mtnSafeGap)
+        && !gaps.some(g=>mtnBx>g.x-60 && mtnBx<g.x+g.w+60)
+        && !plats.some(p=>mtnBx>p.x-70 && mtnBx<p.x+p.w+70);
+      if(mtnClear){
+        obstacles.push({type:'mtn',x:mtnBx,w:MTN_W,hp:3,runeGot:false,endBerg:true});
+        mtnSpawned=true; rockHintT=2.4;
       }
     }
     // ---------- BIP 110 (takduellen: ducka - hoppa - kasta) ----------
@@ -1037,7 +1043,9 @@
     // krav istallet: inget hinder inom 1,5s bakom eller inom 1,5s framfor spelaren (spawnDrone rensar sedan hela den koade banan framfor -> attacken far garanterat fri mark under hela sin livscykel, se spawnDrone).
     const droneAheadClear = !obstacles.some(o=>(o.type==='ground'||o.type==='air'||o.type==='rope') && Math.abs(o.x-player.x)<speed*1.5);
     if(DRONE_ENABLED&&level===4&&!drone&&!boss&&!roofBoss&&droneOK&&droneTimer<=0&&!surge&&!waterOn&&!plats.some(p=>p.roof)&&gaps.length===0&&droneAheadClear)spawnDrone();
-    if(!drone&&!boss&&zone!=='roof'&&spawnX<W+160&&!surge&&!waterOn)spawnGround();
+    // niva 5: tysta nya hinder i slutzonen (fran pre-berg-paret tills berget sprangts) sa korridoren + bergzonen halls rena -> berget kan alltid placeras och de 4 pre-berg-kasten kan aldrig slosas pa lador vid berget
+    const l5BergPending = level===5 && lvlDist>mtnTriggerAt-900 && (!mtnSpawned || !mtn5Destroyed);
+    if(!drone&&!boss&&zone!=='roof'&&spawnX<W+160&&!surge&&!waterOn&&!l5BergPending)spawnGround();
 
     const _oT=trait(), pad=(_oT.hitPad!=null?_oT.hitPad:7), _airLen=_oT.airLeniency||0;
     const ph=curH(),px=player.x,py=player.y-ph,pw=P_W;
@@ -1051,8 +1059,12 @@
         if(o.cut){ o.fallV+=2000*dt; o.fallY+=o.fallV*dt; }
         else if(px+pad<o.x+o.w&&px+pw-pad>o.x){die();return;}
       } else if(o.type==='mtn'){
-        if(o.hp>0){ const sc=o.hp/3, mw=MTN_W*sc, mh=MTN_H*sc;
-          if(px+pw-pad>o.x+mw*0.12 && px+pad<o.x+mw*0.88 && py+ph>GROUND_Y-mh){die();return;} }
+        if(o.hp>0){
+          if(o.endBerg){                                       // niva 5:s berg: ooverhoppbar dodsvagg - dodlig vid horisontell overlapp OAVSETT hojd, vid alla hp>0 (inget fotter-over-topp-undantag). Enda vagen forbi = spranga det. cause='wall' -> kan ej skyddas/undvikas/demo-ryckas av (se die()), bara sat/runa raddar - precis som grop.
+            if(px+pw-pad>o.x+MTN_W*0.10 && px+pad<o.x+MTN_W*0.90){die('wall');return;}
+          } else { const sc=o.hp/3, mw=MTN_W*sc, mh=MTN_H*sc;   // niva 6/10/11: OFORANDRAD kon-kollision (krympande, hoppbar rest)
+            if(px+pw-pad>o.x+mw*0.12 && px+pad<o.x+mw*0.88 && py+ph>GROUND_Y-mh){die();return;} }
+        }
       } else if(o.type==='fall'){
         if(!o.landed){ o.vy=(o.vy||0)+2600*dt; o.y+=o.vy*dt;
           if(o.y+o.h>=GROUND_Y){ o.y=GROUND_Y-o.h; o.landed=true; shakeT=Math.max(shakeT,0.12);
@@ -1132,7 +1144,10 @@
         d.x+=d.vx*dt; d.vy+=DYN_GRAV*dt; d.y+=d.vy*dt; d.t+=dt;
         let hitObs=null;
         for(const o of obstacles){
-          if(o.type==='mtn' && o.hp>0){ const sc=o.hp/3, cx=o.x+MTN_W*sc*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }   // horisontell traff racker (bergets siluett ar hog och bred, ingen hojd-precision kravs)
+          if(o.type==='mtn' && o.hp>0){
+            if(o.endBerg){ if(d.x>o.x-DYN_HIT_R && d.x<o.x+MTN_W+DYN_HIT_R){ hitObs=o; break; } }   // niva 5:s berg: traff var som helst over hela den breda basen racker (palitlig sprangning - bot-mitigering sa boten sakert landar 3 traffar mot den ooverhoppbara vaggen)
+            else { const sc=o.hp/3, cx=o.x+MTN_W*sc*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }   // horisontell traff racker (bergets siluett ar hog och bred, ingen hojd-precision kravs)
+          }
           else if(o.crate && o.hp>0){ const cx=o.x+CRATE_W*0.5; if(Math.abs(d.x-cx)<DYN_HIT_R){ hitObs=o; break; } }
         }
         if(hitObs || d.y>=GROUND_Y-6){
@@ -1142,14 +1157,15 @@
           if(hitObs){
             hitObs.hp--;
             if(hitObs.type==='mtn'){
-              const sc=Math.max(hitObs.hp,1)/3, mx=hitObs.x+MTN_W*sc*0.5;
+              const sc=Math.max(hitObs.hp,1)/3, mx=hitObs.endBerg?hitObs.x+MTN_W*0.5:hitObs.x+MTN_W*sc*0.5;   // endBerg krymper inte -> centrera pa full bredd
               if(hitObs.hp<=0){ bonus+=20;
+                if(hitObs.endBerg) mtn5Destroyed=true;   // bestandig flagga - level-gaten (se ovan) beror INTE pa att objektet fortfarande finns kvar i obstacles-arrayen
                 for(let i=0;i<42;i++)particles.push({x:mx,y:GROUND_Y-30,vx:(Math.random()-0.5)*540,vy:-Math.random()*540,life:0.5+Math.random()*0.5,c:Math.random()<0.6?'#6e6e6e':'#4a4a4a',s:5+Math.random()*6});
                 if(!hitObs.runeGot){ hitObs.runeGot=true; coinsArr.push({x:mx,y:GROUND_Y-150,bob:0,got:false,rune:true,life:RUNE_LIFE});
                   for(let i=0;i<22;i++)particles.push({x:mx,y:GROUND_Y-110,vx:(Math.random()-0.5)*360,vy:-Math.random()*420-80,life:0.4+Math.random()*0.4,c:Math.random()<0.6?'#f7a000':'#ffe08a',s:3+Math.random()*4}); }
               }
             } else if(hitObs.crate){
-              bonus+=10;
+              // TNT-lada sprangs: bara explosionen, INGEN beloning (ingen bonus, inga mynt)
               for(let i=0;i<24;i++)particles.push({x:hitObs.x+CRATE_W*0.5,y:GROUND_Y-CRATE_H*0.5,vx:(Math.random()-0.5)*380,vy:-Math.random()*360,life:0.35+Math.random()*0.35,c:Math.random()<0.5?'#8a5a30':'#c9c9c9',s:3+Math.random()*4});
             }
           }
@@ -1540,7 +1556,56 @@
       }
     }
   }
+  // niva 5:s garanterade berg: massivt kantigt klippberg (~halva skarmen), flera toppar/avsatser, ljus front + skuggsida, terrakotta-rimljus sa det sticker ut mot nivans terrakottamiljo. Krymper INTE med hp - skadan visas som glodande sprickor. ENDAST detta berg (o.endBerg); niva 6/10/11 anvander gamla konen nedan.
+  function drawEndBerg(o){
+    const b=GROUND_Y, x=o.x, w=MTN_W, h=MTN5_H;
+    const dmg=Math.max(0,1-o.hp/3);                          // 0, 0.33, 0.67 -> fler/starkare sprickor
+    // --- massiv kantig silhuett (bred bas med overhang, flera toppar) ---
+    function ridge(){ ctx.beginPath();
+      ctx.moveTo(x-16,b);
+      ctx.lineTo(x-10,b-h*0.34); ctx.lineTo(x+w*0.10,b-h*0.52); ctx.lineTo(x+w*0.20,b-h*0.40);
+      ctx.lineTo(x+w*0.34,b-h*0.72); ctx.lineTo(x+w*0.46,b-h*1.00);   // huvudtopp
+      ctx.lineTo(x+w*0.56,b-h*0.70); ctx.lineTo(x+w*0.66,b-h*0.88);   // bitopp
+      ctx.lineTo(x+w*0.78,b-h*0.54); ctx.lineTo(x+w*0.90,b-h*0.66);   // sidotopp
+      ctx.lineTo(x+w+14,b-h*0.30); ctx.lineTo(x+w+18,b); ctx.closePath(); }
+    ridge(); ctx.fillStyle='#33383f'; ctx.fill();            // massiv mork klippkropp (kall slate -> hog kontrast mot varm terrakotta)
+    // skuggsida (hoger halva)
+    ctx.save(); ridge(); ctx.clip();
+    ctx.fillStyle='#23262b'; ctx.beginPath();
+    ctx.moveTo(x+w*0.46,b-h*1.00); ctx.lineTo(x+w*0.66,b-h*0.88); ctx.lineTo(x+w*0.90,b-h*0.66);
+    ctx.lineTo(x+w+18,b); ctx.lineTo(x+w*0.46,b); ctx.closePath(); ctx.fill();
+    // ljus front (vanster halva)
+    ctx.fillStyle='#4c535d'; ctx.beginPath();
+    ctx.moveTo(x-16,b); ctx.lineTo(x-10,b-h*0.34); ctx.lineTo(x+w*0.10,b-h*0.52);
+    ctx.lineTo(x+w*0.20,b-h*0.40); ctx.lineTo(x+w*0.34,b-h*0.72); ctx.lineTo(x+w*0.46,b-h*1.00);
+    ctx.lineTo(x+w*0.40,b); ctx.closePath(); ctx.fill();
+    // avsatser/hyllor (morka horisontella band)
+    ctx.fillStyle='#2b2f35';
+    ctx.fillRect(x-6,b-h*0.34,w*0.7,5); ctx.fillRect(x+w*0.22,b-h*0.55,w*0.62,4);
+    // ljusa klipp-kanter pa huvudtoppen
+    ctx.fillStyle='#666e79';
+    ctx.fillRect(x+w*0.44,b-h*1.00,3,h*0.20); ctx.fillRect(x+w*0.30,b-h*0.70,3,h*0.14);
+    ctx.restore();
+    // terrakotta-rimljus langs vanster ovre rygg (binder berget till miljon + lyfter siluetten)
+    ctx.strokeStyle='#d98a4e'; ctx.lineWidth=2; ctx.beginPath();
+    ctx.moveTo(x-10,b-h*0.34); ctx.lineTo(x+w*0.10,b-h*0.52); ctx.lineTo(x+w*0.20,b-h*0.40);
+    ctx.lineTo(x+w*0.34,b-h*0.72); ctx.lineTo(x+w*0.46,b-h*1.00); ctx.stroke();
+    // skadesprickor: glodande orange, fler for varje traff
+    if(dmg>0){ ctx.save(); ctx.strokeStyle='#ff7a1e'; ctx.lineWidth=2; ctx.globalAlpha=0.85;
+      ctx.beginPath(); ctx.moveTo(x+w*0.46,b-h*0.96); ctx.lineTo(x+w*0.40,b-h*0.60); ctx.lineTo(x+w*0.50,b-h*0.34); ctx.lineTo(x+w*0.44,b-h*0.06); ctx.stroke();
+      if(dmg>0.5){ ctx.beginPath(); ctx.moveTo(x+w*0.62,b-h*0.72); ctx.lineTo(x+w*0.56,b-h*0.40); ctx.lineTo(x+w*0.66,b-h*0.10); ctx.stroke(); }
+      ctx.restore(); }
+    // markskugga
+    ctx.fillStyle='#191b1f'; ctx.fillRect(x-16,b-4,w+34,4);
+    // runa pa huvudtoppen (garanterad slappning vid krossning)
+    if(!o.runeGot){ const rw=RUNE_W*1.05, rh=rw/RUNE_AR, rx=x+w*0.46, ry=b-h-RUNE_OFF-rh*0.5+Math.sin(o.x*0.05+performance.now()*0.004)*3;
+      ctx.save(); ctx.globalAlpha=0.18+0.16*Math.abs(Math.sin(performance.now()*0.005)); ctx.fillStyle='#ffd24a';
+      ctx.beginPath(); ctx.arc(rx,ry,rw*0.8,0,Math.PI*2); ctx.fill(); ctx.restore();
+      if(runeImg.complete && runeImg.naturalWidth>0) ctx.drawImage(runeImg, rx-rw/2, ry-rh/2, rw, rh);
+      else { ctx.fillStyle='#e69000'; ctx.fillRect(rx-rw/2,ry-rh/2,rw,rh); } }
+  }
   function drawMountain(o){
+    if(o.endBerg){ drawEndBerg(o); return; }                 // niva 5:s berg ritas om; gamla konen nedan for niva 6/10/11
     const sc=o.hp/3, w=MTN_W*sc, h=MTN_H*sc, x=o.x, b=GROUND_Y;
     ctx.fillStyle='#6e6e6e';
     ctx.beginPath(); ctx.moveTo(x,b); ctx.quadraticCurveTo(x+w*0.5, b-2*h, x+w, b); ctx.closePath(); ctx.fill();
@@ -2103,6 +2168,7 @@
 
   // ---------- DEBUG HOOK (endast med #dev i URL:en – för automatiserad testning) ----------
   if(location.hash.indexOf('dev')>=0){
+    window.__levelUpLog=[];
     window.__bh={
       snap:()=>({level,state,lvlDist,dist,speed,zone,bossDone,coins,score,demo,startLevel,
         heartsGot,starsThrown,charges,hasShield,py:player&&player.y,
@@ -2116,6 +2182,7 @@
         dynAmmo,dynPk:dynPickups.filter(p=>!p.got).length,runesGot,
         mtnHp:(()=>{const m=obstacles.filter(o=>o.type==='mtn'&&o.hp>0).sort((a,b)=>a.x-b.x)[0];return m?m.hp:null;})(),
         mtnDx:(()=>{const m=obstacles.filter(o=>o.type==='mtn'&&o.hp>0).sort((a,b)=>a.x-b.x)[0];return m?Math.round(m.x-(player.x+P_W)):null;})(),
+        mtnSpawned,mtn5Destroyed,
         phase:(roofBoss&&('roof:'+roofBoss.phase))||(boss&&('boss:'+boss.phase))||(drone&&('drone:'+drone.phase))||null}),
       play:(n)=>{ demo=true; startLevel=Math.max(1,Math.min(11,n|0)); maxLevel=Math.max(maxLevel,startLevel); start(); },
       setDemo:(b)=>{ demo=!!b; },
