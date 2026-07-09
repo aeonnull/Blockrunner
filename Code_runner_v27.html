@@ -526,6 +526,17 @@
     igrace=0; exhaustedT=0; lastDeathCause=null;
     if(trait().shieldFree) hasShield=true;   // CHARCOAL is re-shielded on each new level
     dynReset();
+    // RIKTAD RENSNING vid nivaovergang: allt langt fram (>player.x+260) tillhorde forra nivans regler/rytm och
+    // skulle annars slapa in i den nya nivan (t.ex. niva 2:s hinder/mynt in i niva 3) och ge synlig "darrning" de
+    // forsta sekunderna. Allt NARA spelaren lamnas kvar sa inget hinder rycks bort mitt i ett pagaende hopp.
+    const _cut = player.x + 260;
+    obstacles = obstacles.filter(o => o.x < _cut);
+    gaps      = gaps.filter(g => g.x < _cut);
+    plats     = plats.filter(p => p.x < _cut);
+    hearts    = hearts.filter(h => h.x < _cut);
+    fallers   = fallers.filter(f => f.x < _cut);
+    coinsArr  = coinsArr.filter(c => c.x < _cut);
+    particles = [];
     if(typeof refreshLvlSel==='function') refreshLvlSel();
   }
   function restartLevel(){
