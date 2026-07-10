@@ -909,7 +909,7 @@
     if(level===1){ speed = lvlDist<1500 ? 150 : Math.min(SPD_MAX, 182 + Math.max(0,lvlDist-5000)*0.0015); }
     else { speed=Math.min(SPD_MAX, LVL_SPD[Math.min(level,7)] + lvlDist*0.0015); }
     if(zone==='roof'){ const cap=210+Math.max(0,roofRuns-1)*45; speed=Math.min(speed,cap); }
-    if(l6RoofMode){ speed=Math.min(speed, 214+Math.min(1,lvlDist/LVL_LEN[Math.min(level,7)])*26); }   // ORDER: M2 (taket) = lugnare takfart som gamla ROOFTOPS (~214->240), inte gatans 265-282. Ger rattvis reaktionstid for glapp/klippberg/kulor; stiger nagot mot slutet.
+    if(l6RoofMode){ speed=Math.min(speed, (level===7?(232+Math.min(1,lvlDist/LVL_LEN[7])*40):(214+Math.min(1,lvlDist/LVL_LEN[Math.min(level,7)])*26))); }   // ORDER: M2 (taket) = lugnare takfart som gamla ROOFTOPS (~214->240), inte gatans 265-282. Ger rattvis reaktionstid for glapp/klippberg/kulor; stiger nagot mot slutet. Niva 7: tempot hojt en aning (~232->272), niva 6 helt oforandrat (214->240).
     dist+=speed*dt; { const _sT=trait(), _sm=_sT.scoreMult||1, _cvm=_sT.coinValMult||1;
       score=Math.round((Math.floor(dist/10)+coins*COIN_VAL*_cvm+bonus)*_sm); }
     // ---------- KVARTER ----------
