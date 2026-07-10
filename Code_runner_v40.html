@@ -1925,6 +1925,20 @@
   // utom sma utskott (hydrantens munstycken, tunnans lock). Fotbollen roterar med o.spin.
   function drawCityProp(kind,x,y,w,h,o){
     const cx=x+w/2;
+    if(kind==='antenn'){                                       // TV-antenn, kod-ritad pa order (spriten blev for blek) - mork metallmast, hog kontrast
+      const poleW=Math.max(3,w*0.14), px2=cx-poleW/2;
+      ctx.fillStyle='#0d0d0d'; ctx.fillRect(px2,y,poleW,h);
+      ctx.fillStyle='#3a3a3a'; ctx.fillRect(px2,y,Math.max(1,poleW*0.4),h);
+      const bars=4;
+      for(let i=0;i<bars;i++){
+        const by=y+h*0.12+i*(h*0.72/(bars-1));
+        const bw2=w*(0.95-i*0.20);
+        ctx.fillStyle='#232323'; ctx.fillRect(cx-bw2/2,by-2,bw2,4);
+        ctx.fillStyle='#4a4a4a'; ctx.fillRect(cx-bw2/2,by-2,bw2,1.5);
+      }
+      ctx.fillStyle='#c0392b'; ctx.fillRect(cx-2,y-6,4,6);
+      return;
+    }
     const SPR=CITY_SPR[kind];
     if(SPR && SPR.img.complete && SPR.img.naturalWidth){        // rita anvandarens sprite om den laddat
       ctx.save(); ctx.imageSmoothingEnabled=false;
