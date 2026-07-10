@@ -934,11 +934,10 @@
     // niva 7: TAK -> LAND -> SLUTBERG -> BIP -> EXCALIBUR (se enterWon() och l7Land-blocket nedan). Klaras ALDRIG via distans som niva 1-6.
     else if(level<7 && lvlDist>LVL_LEN[level] && !surge && !boss && !roofBoss && !(level===5 && (!mtnSpawned || !mtn5Destroyed)) ){ bonus+=150*bmult(); levelUp(); }
     else if(level===7 && !l7Land && lvlDist>LVL_LEN[7] && player.onGround && !surge && !boss && !gaps.some(g=>g.x>player.x-60&&g.x<W+340) && !plats.some(p=>p.x+p.w>player.x-60&&p.x<W+340)){
-      // TAK -> LAND: tydlig overgang. Stanger av taklaget (bakgrunden tonar tillbaka fran varm tak-marong till kall gatublatt = "farg/bakgrundsskifte"), visar LAND-banner, och reser en avsats spelaren hoppar ner fran.
-      l7Land=true; l6RoofMode=false; l7LandBannerT=3.0; l7BergTriggerDist=lvlDist+1100;
+      // TAK -> LAND: tydlig overgang enbart via banner + bakgrundsskifte (l6RoofMode av -> bakgrunden tonar tillbaka fran varm tak-marong till kall gatublatt). Ingen egen platform-avsats - undviker krock med befintlig M1->M2-containertrappa.
+      l7Land=true; l6RoofMode=false; l7LandBannerT=3.0; l7BergTriggerDist=lvlDist+2600;   // gott om sträcka/tid att hinna plocka flera hammare innan berget (se hammar-ekonomin)
       const _cut=player.x+260;
       obstacles=obstacles.filter(o=>o.x<_cut); gaps=gaps.filter(g=>g.x<_cut); plats=plats.filter(p=>p.x<_cut); ropeBalls=[];
-      plats.push({x:spawnX, top:GROUND_Y-90, w:260, roof:true}); spawnX+=260+520;
     }
     // ---------- NIVA 7 SLUTBERG (mark): garanterat, ooverhoppbart, krossas med hammaren (endBerg = samma dodliga kollision som niva 5:s berg) ----------
     if(level===7 && l7Land && !l7BergSpawned && lvlDist>l7BergTriggerDist){
