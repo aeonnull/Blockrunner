@@ -1030,7 +1030,7 @@
     const fallOK = (level===3&&lvlDist>1500) && !gaps.some(g=>g.water);   // fallande block ar niva 3:s (och ENDAST niva 3:s) signum -> niva 4/6/7 undantagna sa de behaller sin egen rytm (dronare/vatten-tak resp.)
     if(fallOK && !roofBoss && !surge){ fallX-=speed*dt;
       if(fallX<=0){ const fx=player.x+300+Math.random()*240;
-        const warnT=(level===3?1.0:0.65), fallFlightT=(level===3?1.70:1.35);   // niva 3: langre varning 1.0s; landX-estimat matchar (1.0 varning + 0.70 falltid)
+        const warnT=(level===3?1.3:0.65), fallFlightT=(level===3?2.00:1.35);   // niva 3: langre varning 1.3s (ett snapp lattare pa order); landX-estimat matchar (1.3 varning + 0.70 falltid)
         const landX=fx-speed*fallFlightT, safeGap=Math.max(180,speed*0.85);
         const clear = (level===3
             ? !obstacles.some(o=>Math.abs(o.x-fx)<safeGap)                                     // niva 3: skydda blockets HELA x-bana. Allt scrollar med samma speed, sa ett hinder vid fx co-travellar exakt till landningspunkten (landX=fx-speed*flygtid) och foljer med genom fall+landning. Att kolla fx (inte landX-nu) ar just skyddet av landningszonen vid landningsogonblicket
