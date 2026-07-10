@@ -874,7 +874,7 @@
       plats.push({x:spawnX, top:GROUND_Y-rh, w:rw, roof:true}); spawnX+=rw+buf(); lastAction='jump'; logstr='raise'+rh;
     } else if(f===2){                // TAKHINDER — hoga hinder, sallan sma (pa order). Mest ANTENN (hoppbar), ibland en hog skorsten.
       if(Math.random()<0.65){                                // ANTENN pa taket (spelarens sprite), smal & hog - vanligare nu
-        const bh=132+t*22+Math.random()*16, bw=Math.max(16,bh*CITY_SPR.antenn.aspect);   // lika hog som gatans hogsta hinder
+        const bh=132+t*22+Math.random()*16, bw=36+t*6;   // lika hog som gatans hogsta hinder. bw fast/bred (kod-ritad antenn, ej langre kopplad till spritens smala aspect-ratio)
         obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:bw,h:bh,roofProp:true,antenn:true}); spawnX+=bw+buf(); lastAction='jump'; logstr='ant'+Math.round(bh);
       } else {
         const bh=104+t*14+Math.random()*24;                   // 104..~142 (hojd, aldrig "litet"; kapat sa fullhopps-apex 248 alltid klarar det)
@@ -1925,18 +1925,19 @@
   // utom sma utskott (hydrantens munstycken, tunnans lock). Fotbollen roterar med o.spin.
   function drawCityProp(kind,x,y,w,h,o){
     const cx=x+w/2;
-    if(kind==='antenn'){                                       // TV-antenn, kod-ritad pa order (spriten blev for blek) - mork metallmast, hog kontrast
-      const poleW=Math.max(3,w*0.14), px2=cx-poleW/2;
-      ctx.fillStyle='#0d0d0d'; ctx.fillRect(px2,y,poleW,h);
-      ctx.fillStyle='#3a3a3a'; ctx.fillRect(px2,y,Math.max(1,poleW*0.4),h);
-      const bars=4;
-      for(let i=0;i<bars;i++){
-        const by=y+h*0.12+i*(h*0.72/(bars-1));
-        const bw2=w*(0.95-i*0.20);
-        ctx.fillStyle='#232323'; ctx.fillRect(cx-bw2/2,by-2,bw2,4);
-        ctx.fillStyle='#4a4a4a'; ctx.fillRect(cx-bw2/2,by-2,bw2,1.5);
+    if(kind==='antenn'){                                       // TV-antenn, kod-ritad pa order - mork mast + TRE breda val-separerade tvargolv + kaninoron i toppen (las inte som "ett T med ett streck")
+      const poleW=Math.max(3,w*0.16), px2=cx-poleW/2;
+      ctx.fillStyle='#0d0d0d'; ctx.fillRect(px2,y+h*0.10,poleW,h*0.90);
+      ctx.fillStyle='#3a3a3a'; ctx.fillRect(px2,y+h*0.10,Math.max(1,poleW*0.4),h*0.90);
+      const bars=[[0.22,1.00],[0.46,0.72],[0.70,0.46]];         // [y-andel, breddandel] - stor, medel, liten, tydligt trappstegad
+      for(const [ty,bwf] of bars){
+        const by=y+h*ty, bw2=w*bwf;
+        ctx.fillStyle='#1a1a1a'; ctx.fillRect(cx-bw2/2,by-3,bw2,6);
+        ctx.fillStyle='#5a5a5a'; ctx.fillRect(cx-bw2/2,by-3,bw2,2);
       }
-      ctx.fillStyle='#c0392b'; ctx.fillRect(cx-2,y-6,4,6);
+      ctx.strokeStyle='#0d0d0d'; ctx.lineWidth=Math.max(2,poleW*0.7); ctx.lineCap='round';   // kaninoron uppat mot toppen
+      ctx.beginPath(); ctx.moveTo(cx,y+h*0.10); ctx.lineTo(cx-w*0.46,y); ctx.moveTo(cx,y+h*0.10); ctx.lineTo(cx+w*0.46,y); ctx.stroke();
+      ctx.fillStyle='#c0392b'; ctx.beginPath(); ctx.arc(cx,y-2,3,0,Math.PI*2); ctx.fill();   // liten varningslampa i toppen
       return;
     }
     const SPR=CITY_SPR[kind];
