@@ -1061,7 +1061,7 @@
       const _sx=W+30, _s7=1.5;                                    // storre skala -> tydlig bred trappa, ~halva skarmens hojd
       l6Deco.push({x:_sx, kind:'stairs', black:true, s:_s7});
       for(const [x0,x1,hh] of STAIR_STEPS){
-        plats.push({x:_sx+x0*_s7, top:GROUND_Y-hh*_s7, w:(x1-x0)*_s7+2, stair:true});
+        plats.push({x:_sx+x0*_s7, top:GROUND_Y-hh*_s7, w:(x1-x0)*_s7+2, stair:true, blackStair:true});
         coinsArr.push({x:_sx+((x0+x1)/2)*_s7, y:GROUND_Y-hh*_s7-42, bob:0, got:false});
       }
       spawnX=Math.max(spawnX, _sx+STAIR_SPR_W*_s7+260);
@@ -1398,7 +1398,7 @@
       } else if(hammer.x<-90){ hammer=null; hammerTimer=(level===7&&(l6RoofMode||l7Land)&&l7HamSpawned<9)?(3+Math.random()*3):(11+Math.random()*8); }
     } else {
       hammerTimer-=dt;
-      if(hammerTimer<=0 && speed>(level>=6?240:320) && level>=6 && !waterOn && !drone && !surge){ hammer={x:W+50,y:GROUND_Y-HAM_Y_OFF,bob:0}; if(level===7)l7HamSpawned++; }   // TORS HAMMARE: endast niva 6/7 (den enda som anvander mtn-klippor/drönar-sveper den kan slå sönder), och aldrig under vattnet/surfen -> plockas garanterat i M2 (taket). speed-tröskeln sänkt for niva 6 (dess fart 265-283 nar aldrig 320). Niva 7: snabbare respawn + max 9 under slutstriden.
+      if(hammerTimer<=0 && speed>(level===7?150:(level>=6?240:320)) && level>=6 && !waterOn && !drone && !surge){ hammer={x:W+50,y:GROUND_Y-HAM_Y_OFF,bob:0}; if(level===7)l7HamSpawned++; }   // TORS HAMMARE: endast niva 6/7 (den enda som anvander mtn-klippor/drönar-sveper den kan slå sönder), och aldrig under vattnet/surfen -> plockas garanterat i M2 (taket). BUGFIX niva 7: l6RoofMode-hastighetstaket (214-240) lag ALDRIG over 240 -> hammaren kunde aldrig spawna. Sankt troskel bara for niva 7, niva 6 oforandrad.
     }
     if(swingT>0){
       swingT-=dt;
@@ -2240,6 +2240,11 @@
         ctx.fillStyle='#ffce5a'; ctx.fillRect(p.x,p.top,p.w,2);
         ctx.fillStyle='#4a5168';                                                      // rooftop windows for depth
         for(let wx=p.x+16; wx<p.x+p.w-16; wx+=44){ ctx.fillRect(wx,p.top+24,14,20); }
+        continue;
+      }
+      if(p.blackStair){                                 // niva 7: de faktiska klivbara stegen - svarta, matchar l6Deco-bakgrunden (INTE bana 6:s befintliga guldfärgade stair-plattform)
+        ctx.fillStyle='#050505'; ctx.fillRect(p.x,p.top,p.w,14);
+        ctx.fillStyle='#1c1c1c'; ctx.fillRect(p.x,p.top+14,p.w,22);
         continue;
       }
       ctx.fillStyle='#f7a000'; ctx.fillRect(p.x,p.top,p.w,14);
