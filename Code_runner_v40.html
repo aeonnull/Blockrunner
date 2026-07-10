@@ -1288,7 +1288,8 @@
     const _oT=trait(), pad=(_oT.hitPad!=null?_oT.hitPad:7), _airLen=_oT.airLeniency||0;
     const ph=curH(),px=player.x,py=player.y-ph,pw=P_W;
     for(const o of obstacles){
-      o.x-=speed*dt;
+      const _l7Frozen = (o.l7Final && o.hp>0 && o.hp<3 && charges<=0);   // BUGFIX (empiriskt): efter forsta traffen mot niva 7:s slutberg fryser vaggens annalkande tills spelaren ater har en hammare i hand - annars omojligt att hinna atererövra innan dodlig kontakt
+      if(!_l7Frozen) o.x-=speed*dt;
       if(o.roll){ o.x-=o.roll*dt; o.spin=(o.spin||0)+(speed+o.roll)*dt*0.02;   // fotbollen rullar nagot fortare an banan (mindre reaktionstid), spin driver ritrotationen
         if(o.prop==='ball'){ o.bph=(o.bph||0)+(speed+o.roll)*dt*0.013; o.bnc=Math.abs(Math.sin(o.bph))*o.w*1.05; } }   // ...och STUDSAR: hitbox+ritning lyfts av o.bnc (se kollision/draw)
       if(o.type==='ground'){
@@ -1407,7 +1408,7 @@
           for(let i=0;i<44;i++)particles.push({x:bcx,y:GROUND_Y-30,vx:(Math.random()-0.5)*560,vy:-Math.random()*560,life:0.5+Math.random()*0.5,c:Math.random()<0.5?'#7de8ff':ORANGE,s:4+Math.random()*5}); }
       }
       else if(!swingHit && swingT<=SWING_T-SWING_HIT && swingTarget && swingTarget.hp>0){
-        swingHit=true; const o=swingTarget; o.hp--; o.x+=34; if(o.l7Final)charges=0;
+        swingHit=true; const o=swingTarget; o.hp--; o.x+=(o.l7Final?170:34); if(o.l7Final)charges=0;   // BUGFIX (empiriskt): niva 7:s slutberg ar en ovakbar dodsvagg (endBerg) - med bara 34px knuff hann spelaren aldrig hinna atererövra en ny hammare mellan traffarna innan vaggen dodade. 170px ger verklig marginal.
         shakeT=Math.max(shakeT,0.26); flashT=Math.max(flashT,0.07); hammerSfx();
         const sc=Math.max(o.hp,1)/3, mx=o.x+MTN_W*sc*0.5, mtop=GROUND_Y-mtnH()*sc;
         for(let i=0;i<30;i++)particles.push({x:mx,y:mtop+10,vx:(Math.random()-0.5)*470,vy:-Math.random()*430,life:0.4+Math.random()*0.4,c:Math.random()<0.5?'#8a8a8a':(Math.random()<0.5?'#9fe8ff':'#ffd24a'),s:4+Math.random()*5});
