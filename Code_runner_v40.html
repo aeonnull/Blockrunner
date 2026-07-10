@@ -862,23 +862,23 @@
     if(level<7 && charges>0 && f===2 && Math.random()<0.5) f=4;        // ibland klippberg i stallet for ett takhinder (bara med laddning). Niva 7: inget berg pa taket (se order) - bara pa marken efter nedhoppet.
     m2PatRun=(f===m2LastPat)?m2PatRun+1:1; m2LastPat=f;
     let logstr;
-    if(f===0){                       // VOID-GLAPP mellan tak — bredd varierar TYDLIGT (kort/mellan/lang), alltid hoppbar
-      const band=Math.random(), cap=speed*0.44;                          // kapat med marginal mot botens/spelarens fulla hopprackvidd (aldrig omojligt)
-      const gw=Math.min(cap, band<0.34 ? (48+Math.random()*22)          // kort 48-70: snabb rytm
-                             : band<0.7 ? (82+Math.random()*26)          // mellan 82-108
-                             :            (112+Math.random()*18));        // lang 112-130 (kapat mot farten)
+    if(f===0){                       // VOID-GLAPP mellan tak — breda hopp (hojd svarighetsgrad pa order), alltid hoppbar (samma sakerhetstak speed*0.44)
+      const band=Math.random(), cap=speed*0.44;
+      const gw=Math.min(cap, band<0.34 ? (72+Math.random()*24)          // kort 72-96
+                             : band<0.7 ? (108+Math.random()*26)         // mellan 108-134
+                             :            (142+Math.random()*20));       // lang 142-162 (kapat mot farten)
       gaps.push({x:spawnX, w:gw}); spawnX+=gw+buf(); lastAction='jump'; logstr='gap'+Math.round(gw);
-    } else if(f===1){                // HOGRE TAK — roof-plattform i varierande hojd, hoppa upp pa & spring, fall av
-      const rh=72+Math.floor(Math.random()*4)*26;           // 72/98/124/150 px over bastaket (inom ett normalt hopp)
-      const rw=210+Math.random()*170;                       // 210-380 bred takyta
+    } else if(f===1){                // HOGRE TAK — roof-plattform, hoga nivaer (lagsta lattaste niva borttagen pa order), hoppa upp pa & spring, fall av
+      const rh=98+Math.floor(Math.random()*4)*26;           // 98/124/150/176 px over bastaket
+      const rw=230+Math.random()*180;                       // 230-410 bred takyta
       plats.push({x:spawnX, top:GROUND_Y-rh, w:rw, roof:true}); spawnX+=rw+buf(); lastAction='jump'; logstr='raise'+rh;
-    } else if(f===2){                // TAKHINDER — ventlada/skorsten ELLER anvandarens antenn (bada hoppas over)
-      if(Math.random()<0.5){                                 // ANTENN pa taket (spelarens sprite), smal & hog
+    } else if(f===2){                // TAKHINDER — hoga hinder, sallan sma (pa order). Mest ANTENN (hoppbar), ibland en hog skorsten.
+      if(Math.random()<0.65){                                // ANTENN pa taket (spelarens sprite), smal & hog - vanligare nu
         const bh=132+t*22+Math.random()*16, bw=Math.max(16,bh*CITY_SPR.antenn.aspect);   // lika hog som gatans hogsta hinder
         obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:bw,h:bh,roofProp:true,antenn:true}); spawnX+=bw+buf(); lastAction='jump'; logstr='ant'+Math.round(bh);
       } else {
-        const bh=76+t*12+Math.random()*26;                    // 76 .. ~114 (>= halva gubben; kapat sa fullhopps-apex 248 alltid klarar det)
-        let bw=32+t*8+Math.random()*14; if(bw>clearW)bw=clearW;   // smalt (32-54) -> spelaren passerar snabbt, descenten klipper aldrig baksidan
+        const bh=104+t*14+Math.random()*24;                   // 104..~142 (hojd, aldrig "litet"; kapat sa fullhopps-apex 248 alltid klarar det)
+        let bw=44+t*8+Math.random()*14; if(bw>clearW)bw=clearW;
         obstacles.push({type:'ground',x:spawnX,y:GROUND_Y,w:bw,h:bh,roofProp:true}); spawnX+=bw+buf(); lastAction='jump'; logstr='obst'+Math.round(bh);
       }
     } else if(f===3){                // DUCK-overhang — hangande antenn/kabel, ducka under
@@ -1058,7 +1058,7 @@
     // ---------- NIVA 7: inget vatten - bana 7 ar ENBART tak. Trappar direkt upp till taket vid nivastart (samma trappmekanik som M1->M2 nedan, aterandvand). ----------
     if(level===7 && !l6RoofMode && !l7RoofStarted && lvlDist>60){
       l7RoofStarted=true; l6RoofMode=true; if(!roofHintShown){ roofHintShown=true; roofHintT=2.8; }
-      const _sx=W+30, _s7=1.5;                                    // storre skala -> tydlig bred trappa, ~halva skarmens hojd
+      const _sx=W+30, _s7=1.9;                                    // STOR skala -> tydlig bred svart trappa, ~halva-tva tredjedelar av skarmens hojd (H=760)
       l6Deco.push({x:_sx, kind:'stairs', black:true, s:_s7});
       for(const [x0,x1,hh] of STAIR_STEPS){
         plats.push({x:_sx+x0*_s7, top:GROUND_Y-hh*_s7, w:(x1-x0)*_s7+2, stair:true, blackStair:true});
@@ -1266,21 +1266,7 @@
     const l5BergPending = level===5 && lvlDist>mtnTriggerAt-900 && (!mtnSpawned || !mtn5Destroyed);
     if(!drone&&!boss&&zone!=='roof'&&spawnX<W+160&&!surge&&!waterOn&&!l5BergPending){ if(l6RoofMode) spawnRoofM2(); else spawnGround(); }   // ORDER 5: M2 (tak) far en egen monster-/hojdvarierad generator; M1-intro + niva 1-5 anvander oforandrat spawnGround
     // ---------- RIVNINGSKULA uppifran (duck-hinder): ENDAST niva 4 (1 st, stilla - introduktion) + niva 5 (2 st, svingande) ----------
-    if(wballLevel!==level){ wballLevel=level; wballsThisLevel=0; }
-    if((level===4||level===5) && !l6RoofMode && !waterOn && !surge && !boss && !drone && zone!=='roof'){
-      const _cap=(level===4?1:2), _thArr=(level===4?[0.5]:[0.34,0.66]);
-      if(wballsThisLevel<_cap && lvlDist>LVL_LEN[Math.min(level,7)]*_thArr[wballsThisLevel] && !obstacles.some(o=>o.type==='wball')
-         && !obstacles.some(o=>o.type==='ground'&&o.x>W-40) && !gaps.some(g=>g.x>W-120&&g.x<W+420)){
-        obstacles.push({type:'wball', x:W+90, w:84, h:84, phase:Math.random()*6.28, swing:(level===5)});
-        wballsThisLevel++;
-      }
-    }
-    // ---------- NIVA 7: rivningskula (wball) aven pa TAKET - svart, kraver sats/timing (upp till 3 under hela taket) ----------
-    if(level===7 && l6RoofMode && !l7Land && wballsThisLevel<3 && lvlDist>900*(wballsThisLevel+1) && !obstacles.some(o=>o.type==='wball')
-       && !obstacles.some(o=>o.type==='ground'&&o.x>W-40) && !gaps.some(g=>g.x>W-120&&g.x<W+420) && !plats.some(p=>p.roof&&p.x+p.w>W-140)){
-      obstacles.push({type:'wball', x:W+90, w:84, h:84, phase:Math.random()*6.28, swing:true});
-      wballsThisLevel++;
-    }
+    // Rivningskulan (wball) borttagen ur hela spelet pa uttrycklig order - spawnas aldrig langre (niva 4/5/7 tidigare).
     // ---------- DELIBERATA GATUHINDER (storre = utmaning). Exakt uppsattning per bana: ----------
     //   niva 2: 1 ror + 1 soptunna  |  niva 3: 1 soptunna + 1 brandpost.  Alla hoppbara, generosa avstand.
     if((level===2||level===3) && zone==='street' && !waterOn && !surge && !boss && !drone && !l6RoofMode){
@@ -1398,7 +1384,11 @@
       } else if(hammer.x<-90){ hammer=null; hammerTimer=(level===7&&(l6RoofMode||l7Land)&&l7HamSpawned<9)?(3+Math.random()*3):(11+Math.random()*8); }
     } else {
       hammerTimer-=dt;
-      if(hammerTimer<=0 && speed>(level===7?150:(level>=6?240:320)) && level>=6 && !waterOn && !drone && !surge){ hammer={x:W+50,y:GROUND_Y-HAM_Y_OFF,bob:0}; if(level===7)l7HamSpawned++; }   // TORS HAMMARE: endast niva 6/7 (den enda som anvander mtn-klippor/drönar-sveper den kan slå sönder), och aldrig under vattnet/surfen -> plockas garanterat i M2 (taket). BUGFIX niva 7: l6RoofMode-hastighetstaket (214-240) lag ALDRIG over 240 -> hammaren kunde aldrig spawna. Sankt troskel bara for niva 7, niva 6 oforandrad.
+      if(hammerTimer<=0 && speed>(level===7?150:(level>=6?240:320)) && level>=6 && !waterOn && !drone && !surge){
+        const _rp=l6RoofMode?plats.find(p=>p.roof && p.x>W-40):null;                 // om ett hojt takblock ar pa vag in: hang hammaren HOGRE OVANFOR det -> kraver hoppa upp pa blocket, sen hoppa igen (som rare sat)
+        hammer=_rp?{x:_rp.x+_rp.w*0.5,y:_rp.top-150,bob:0}:{x:W+50,y:GROUND_Y-HAM_Y_OFF,bob:0};
+        if(level===7)l7HamSpawned++;
+      }   // TORS HAMMARE: endast niva 6/7, aldrig under vattnet/surfen. BUGFIX niva 7: l6RoofMode-hastighetstaket lag ALDRIG over 240 -> hammaren kunde aldrig spawna. Sankt troskel bara for niva 7, niva 6 oforandrad.
     }
     if(swingT>0){
       swingT-=dt;
